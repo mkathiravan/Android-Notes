@@ -117,3 +117,52 @@ State Hoisting: It is a pattern where you move the state to a composable’s cal
         		{Text(“Increment”)}
         	}
         }
+
+### User input handle using Jetpack compose
+
+            @Composable
+             	fun TextInputExample(){
+            	val textState = remember {mutableStateOf(“”)}
+            	Column(modifier = Modifier.padding(16.dp)){
+            		OutlinedTextField(
+            			value= textState.value, 
+            		 onValueChange = {textState.value = it},
+            		  label = {Text(“Enter text”)}
+            		)
+            		Text(text=“You entered: ${textState.value}”, modifier = Modifier.padding(top = 8.dp))
+            	}
+            }
+
+--> The key Components of Jetpack Compose architecture include Composable functions, state management, the Modifier system, navigation with the Navigation Compose library, ViewModel, and integration with existing Android frameworks.
+
+### Side Effects in Jetpack Compose
+
+Side effects in Jetpack Compose refer to operations that have additional effects beyond modifying the UI state. Examples include making network requests, accessing databases, or updating shared preferences.
+
+Key concepts of Side Effects: LaunchedEffect, rememberUpdatedState, DisposableEffect, SideEffect, produceState.
+
+**LaunchedEffect**: It is used to launch a coroutine in the context of a composable. It is typically used for side effects that need to run in response to a change in key inputs. The coroutine will be cancelled and restarted if the key input will change.
+
+**rememberUpdatedState**: It is used to create a state holder that updates its value whenever the input value changes. It ensures that the most recent value is used within a long-running side effect, such as coroutine.
+
+**DisposableEffect**: It is used for side effects that need cleanup when the key input change or when the composable leaves the composition. It provides a way to perform clean-up actions by returning an onDispose lambda.
+
+**Side Effect**: It is used to apply side effects that need to run after every successful recomposition. It is useful for synchronizing compose state with external non-composable state.
+
+**produceState**: It is a composable that allows you to create a state based on some producer logic, typically involving suspending functions. It is useful for state that needs to be derived from asynchronous operations.
+
+**derivedStateOf**: To create a state that is derived from other states and automatically recomposes when any of the dependencies change.
+
+**snapshotFlow**: To convert compose state into a Flow, which can then be collected coroutine.
+
+### What are all core UI components in Jetpack Compose?
+
+        Text & Typography: Text, RichText, TextField
+        Layouts: Column, Row, Box, ConstraintLayout.
+        Buttons: Button, IconButton
+        Images and Icons: Image, Icon
+        List and Scrollable Components: LazyColumn, LazyRow, ScrollableColumn, ScrollableRow
+        Material Design Components: TopAppBar, BottomAppBar, Card, SnackBar
+        Dialog & Modals: AlertDialog, BottomSheet
+        Navigation Component: Navigation
+        Input Components: TextField, Checkbox, RadioButton
