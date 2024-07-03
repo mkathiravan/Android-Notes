@@ -453,3 +453,85 @@ C) **State Hoisting**: Passing state and state-modifying callbacks from parent c
                     Text(text = "Data from flow $dataState")
                 }
 
+
+#### How jetpack compose in communicate via viewModel
+
+                class ComposeViewModelActivity : ComponentActivity() {
+                
+                    private val myViewModel: MyViewModel by viewModels()
+                
+                    companion object {
+                        private val TAG = ComposeViewModelActivity::class.simpleName
+                    }
+                
+                    override fun onCreate(savedInstanceState: Bundle?) {
+                        super.onCreate(savedInstanceState)
+                        Log.d(TAG, "OnCreate_fun_Called")
+                        setContent {
+                            MyScreen(viewModel = myViewModel)
+                        }
+                    }
+                
+                    @Composable
+                     fun MyScreen(viewModel: MyViewModel = viewModel()){
+                        val text by viewModel.text.collectAsState()
+                        Column {
+                            Text(text = text)
+                            Button(onClick = { viewModel.updateText("Hello, ViewModel!") }) {
+                                Text(text = "Update Text")
+                            }
+                        }
+                     }
+
+                class MyViewModel: ViewModel() {
+                
+                    private val customScope = CustomScope()
+                
+                    private val _text = MutableStateFlow("Hello, Jetpack Compose")
+                    val text = _text.asStateFlow()
+                
+                    fun updateText(newText: String)
+                    {
+                        _text.value = newText
+                    }
+                
+                    private val _dataFlow = flow {
+                        repeat(10){
+                            delay(20000L)
+                            emit(it)
+                        }
+                    }.flowOn(Dispatchers.IO)
+                
+                    val dataFlow: Flow<Int> = _dataFlow
+                
+                    fun startJob(job: Job)
+                    {
+                        viewModelScope.launch(job + Dispatchers.IO)
+                        {
+                            try {
+                                repeat(100){i ->
+                                    delay(1000)
+                                    println("ViewModel job running: $i")
+                
+                                }
+                                println("ViewModel job completed")
+                            }catch (e: CancellationException)
+                            {
+                                println("ViewModel job Cancelled in viewModel")
+                            }
+                        }
+                    }
+                
+                    init {
+                //        viewModelScope.launch {
+                //            // Coroutine that will be canceled when the ViewModel is cleared.
+                //                repeat(100){
+                //                print("Coroutine_message $it")
+                //                Log.d("ViewModel_TAG", "ViewModel_Scope$it")
+                //                delay(100)
+                //            }
+                //        }
+                
+                
+                    }
+                }
