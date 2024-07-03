@@ -76,3 +76,94 @@ If you run the above program the output would be like as
           Start of runBlocking
           Running in IO context
           End of runBlocking
+
+### produce:
+
+--> It is used to create a coroutine that produces a stream of elements. It's similar to a generator or iterator in other programming languages, allowing you to emit values from the coroutine and consume them using a receive() function.
+
+                  runBlocking {
+                      val channel: ReceiveChannel<Int> = produce {
+                          for(x in 1..5)
+                          {
+                              send(x)
+                              delay(20000L)
+                          }
+                      }
+                      for(y in channel)
+                      {
+                          println("Received: $y")
+                      }
+                  }
+
+If you run the above program the output would be like as
+
+                  Received: 1
+                  Received: 2
+                  Received: 3
+                  Received: 4
+                  Received: 5
+
+ ### actor:
+
+ --> Actors are a combination of a Coroutine and a Channel. You can send information off to an actor. The actor operates within a Coroutine and reads from that channel to process work. Channels are the way for you to communicate safely between Coroutines.
+
+                  runBlocking {
+                      val actor = actor<Int> {
+                          for(msg in channel)
+                          {
+                              println("Actor_Received $msg")
+                          }
+                      }
+                      actor.send(1)
+                      actor.send(2)
+                      delay(20000L)
+                      actor.send(3)
+                      actor.send(4)
+                      actor.close()
+                  }
+
+If you run the above program the output would be like as
+
+         Actor_Received 1
+         Actor_Received 2
+         Actor_Received 3
+         Actor_Received 4
+
+#### SupervisorScope
+
+---> In Kotlin Coroutines, supervisorScope is a coroutine builder function that creates a new coroutine scope with a different error-handling strategy than coroutineScope.
+                  
+                  runBlocking {
+                      supervisorScope {
+                          val child1 = launch {
+                              try {
+                                  delay(20000L)
+                                  println("Child1 completed")
+                              }catch (e: CancellationException)
+                              {
+                                  println("Child1 was cancelled")
+                              }
+                          }
+                  
+                         val child2 = launch {
+                             try {
+                                 delay(20000L)
+                                 println("Child2 completed")
+                                 throw Exception("Child2 failed")
+                             }catch (e: Exception)
+                             {
+                                 println("Child2 caught an exception: ${e.message}")
+                             }
+                  
+                         }
+                          child1.join()
+                          child2.join()
+                          Log.d(TAG,"ChildStatus_${child1.isActive} && ${child2.isActive}")
+                      }
+                  }
+
+If you run the above program the output would be like as
+
+         Child1 completed
+         Child2 completed
+         Child2 caught an exception: Child2 failed
