@@ -142,18 +142,166 @@ Side effects in Jetpack Compose refer to operations that have additional effects
 Key concepts of Side Effects: LaunchedEffect, rememberUpdatedState, DisposableEffect, SideEffect, produceState.
 
 **LaunchedEffect**: It is used to launch a coroutine in the context of a composable. It is typically used for side effects that need to run in response to a change in key inputs. The coroutine will be cancelled and restarted if the key input will change.
+        
+                   @Composable
+            fun TimerWithUpdatedStateExample() {
+                TimerWithUpdatedState {newTime ->
+                    println("Time updated to: $newTime")
+                    Log.d(TAG,"Time updated to: $newTime")
+        
+                }
+            }
+        
+              @Composable
+            fun TimerWithUpdatedState(onTimeChanged: (Int) -> Unit)
+            {
+                Log.d(TAG,"OnTime_Changed_To: $onTimeChanged")
+                var time by remember {
+                    mutableStateOf(0)
+                }
+                val currentOnTimeChanged by rememberUpdatedState(newValue = onTimeChanged)
+        
+                LaunchedEffect(Unit) {
+                    while (true){
+                        delay(20000L)
+                        time++
+                        currentOnTimeChanged(time)
+                    }
+                }
+        
+                Text(text = "Time: $time seconds")
+        
+            }
 
 **rememberUpdatedState**: It is used to create a state holder that updates its value whenever the input value changes. It ensures that the most recent value is used within a long-running side effect, such as coroutine.
 
+            @Composable
+                fun TimerWithUpdatedStateExample() {
+                    TimerWithUpdatedState {newTime ->
+                        println("Time updated to: $newTime")
+                        Log.d(TAG,"Time updated to: $newTime")
+            
+                    }
+                }
+            
+                @Composable
+                fun TimerWithUpdatedState(onTimeChanged: (Int) -> Unit)
+                {
+                    Log.d(TAG,"OnTime_Changed_To: $onTimeChanged")
+                    var time by remember {
+                        mutableStateOf(0)
+                    }
+                    val currentOnTimeChanged by rememberUpdatedState(newValue = onTimeChanged)
+            
+                    LaunchedEffect(Unit) {
+                        while (true){
+                            delay(20000L)
+                            time++
+                            currentOnTimeChanged(time)
+                        }
+                    }
+            
+                    Text(text = "Time: $time seconds")
+            
+                }
+
 **DisposableEffect**: It is used for side effects that need cleanup when the key input change or when the composable leaves the composition. It provides a way to perform clean-up actions by returning an onDispose lambda.
+
+                @Composable
+                fun DisposableEffectExample()
+                {
+                    var isSubscribed by remember {
+                        mutableStateOf(false)
+                    }
+                    if(isSubscribed)
+                    {
+                        DisposableEffect(Unit) {
+                            println("Subscribed")
+                            onDispose { 
+                                println("Unsubscribed")
+                            }
+                        }
+                    }
+                    
+                    Button(onClick = { isSubscribed = !isSubscribed }) {
+                        Text(text = if(isSubscribed) "Unsubscribe" else "Subscribe")
+                        
+                    }
+                    
+                }
 
 **Side Effect**: It is used to apply side effects that need to run after every successful recomposition. It is useful for synchronizing compose state with external non-composable state.
 
 **produceState**: It is a composable that allows you to create a state based on some producer logic, typically involving suspending functions. It is useful for state that needs to be derived from asynchronous operations.
+            
+                @Composable
+                fun DisplayProducedState()
+                {
+                    val counter by ProduceStateExample()
+                    Text(text = "Produced Counter: $counter")
+                }
+            
+                 @Composable
+                fun ProduceStateExample(): State<Int>
+                {
+                    return produceState(initialValue = 0) {
+                        while (true){
+                            delay(20000L)
+                            value++
+                        }
+                    }
+                }
 
 **derivedStateOf**: To create a state that is derived from other states and automatically recomposes when any of the dependencies change.
 
+                 @Composable
+                    fun DynamicListView(){
+                        val viewModel: ListViewModel = viewModel()
+                        val items by remember {
+                            derivedStateOf { viewModel.items }
+                        }
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp )
+                        ) {
+                            items(items){item->
+                                ListItem(item = item)
+                            }
+                        }
+                    }
+                
+                  class ListViewModel : ViewModel() {
+                    private val _items = mutableStateListOf<String>()
+                    val items: List<String> get() = _items
+                
+                    init {
+                        viewModelScope.launch {
+                            repeat(100){
+                                delay(20000L)
+                                _items.add("Item $it")
+                            }
+                        }
+                    }
+                }
+
 **snapshotFlow**: To convert compose state into a Flow, which can then be collected coroutine.
+
+              @Composable
+                fun SnapshotFlowExample(){
+                    var count by remember {
+                        mutableStateOf(0)
+                    }
+                    LaunchedEffect(Unit) {
+                        snapshotFlow { count}
+                            .collect{value->
+                                println("Count changes to $value")
+            
+                        }
+                    }
+                    Button(onClick = { count++ }) {
+                        Text(text = "Increment")
+                    }
+                }
 
 ### What are all core UI components in Jetpack Compose?
 
@@ -195,6 +343,23 @@ C) **State Hoisting**: Passing state and state-modifying callbacks from parent c
 
 —> **RememberCoroutineScope**: It is a function that provides a CoroutineScope that is tied to the lifecycle of the composable it is used in. This CoroutineScope can be launch coroutines that will be automatically cancelled when the composable leaves the composition. This helps in managing the lifecycle of coroutines and avoid memory leaks. 
 
+                @Composable
+                fun MyCoroutineScopeComposable(){
+                    val coroutineScope = rememberCoroutineScope()
+                    var message by remember {
+                        mutableStateOf("Hello")
+                    }
+                    Column {
+                        Text(text = message)
+                        Button(onClick = { coroutineScope.launch {
+                            delay(20000L)
+                            message = "Coroutine Finished"
+                        } }) {
+                            Text(text = "Start Coroutine")
+                        }
+                    }
+                }
+
 —> Semantics provide a way to describe the meaning and role of UI elements to accessibility services, automated UI testing frameworks and other tools that interact with the UI. Using Modifier.semantics and related property you can provide meaningful descriptions and roles for your UI elements.
 
 —> **Jetpack Compose phases**: Composition, Measurement and Layout, Drawing and Painting, Input Handling, State Management. Recomposition
@@ -216,7 +381,8 @@ C) **State Hoisting**: Passing state and state-modifying callbacks from parent c
 —> The **Scaffold** layout is a higher-level layout that provides a structure for common UI elements like the app bar, floating action button, and more.
 
 ### How to passing the data between screens?
-     1. Using Navigation Component
+
+  #### 1. Using Navigation Component
 
                         @Composable
                 	fun NavGraph(startDestination: String = “screen1”)
@@ -253,7 +419,7 @@ C) **State Hoisting**: Passing state and state-modifying callbacks from parent c
                 		Text(text = “Received data: $data”)
                 	}
                 
-                        2. Using ViewModel
+  #### 2. Using ViewModel
                 	
                 	class sharedViewModel(): ViewModel(){
                 		private val _data = MutableLiveData<String>()
@@ -278,3 +444,12 @@ C) **State Hoisting**: Passing state and state-modifying callbacks from parent c
                 		val data by viewModel.data.observeAsState()
                 		Text(text = “Received Data : $data”)
                 	}
+
+  #### How to convert the state into flow
+  
+               @Composable
+                fun MyComposableFlow(viewModel: MyViewModel = viewModel()){
+                    val dataState by viewModel.dataFlow.collectAsState(initial = 0)
+                    Text(text = "Data from flow $dataState")
+                }
+
