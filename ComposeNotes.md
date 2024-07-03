@@ -166,3 +166,115 @@ Key concepts of Side Effects: LaunchedEffect, rememberUpdatedState, DisposableEf
         Dialog & Modals: AlertDialog, BottomSheet
         Navigation Component: Navigation
         Input Components: TextField, Checkbox, RadioButton
+
+### What are layouts available in compose?
+
+Column, Row, Box, ConstraintLayout, Scaffold, LazyColumn, LazyRow, ScrollableColumn, ScrollableRow
+
+### Types of States in Compose
+
+ a) **MutableState**: It represents a single value that can be observed and modified.  
+              Ex: var count by mutableStateOf(0)
+              
+ B) **DerivedState**: Computes a value based on other state variables or data. It updates automatically when its dependencies change.
+             Ex: val isPositive = derivedStatOf { count > 0}
+             
+C) **State Hoisting**: Passing state and state-modifying callbacks from parent composable to child composable.
+                     
+                     Ex: @Composable
+            		fun ParentComponent(){
+            			var count by remember {mutableStateOf(0)}
+            			ChildComponent(count, onCountChanged = {newCount -> count = newCount})
+            		}
+                           @Composable
+                            fun	ChildComponent(count: Int, onCountChanged: (Int) -> Unit){
+            			Button(onClick = { onCountChanged(count+1})}{
+            				Text(text = “Increment $count”)
+            			}
+            		}
+
+—> **RememberCoroutineScope**: It is a function that provides a CoroutineScope that is tied to the lifecycle of the composable it is used in. This CoroutineScope can be launch coroutines that will be automatically cancelled when the composable leaves the composition. This helps in managing the lifecycle of coroutines and avoid memory leaks. 
+
+—> Semantics provide a way to describe the meaning and role of UI elements to accessibility services, automated UI testing frameworks and other tools that interact with the UI. Using Modifier.semantics and related property you can provide meaningful descriptions and roles for your UI elements.
+
+—> **Jetpack Compose phases**: Composition, Measurement and Layout, Drawing and Painting, Input Handling, State Management. Recomposition
+
+ ### How to handle state in device orientation in Compose UI?
+ 
+ Ans: ViewModels and State Management, rememberSaveable, Handle Configuration Changes manually(onSaveInstanceState and onRestoreInstanceState) 
+
+  —> Use ViewModel when the state needs to survive configuration changes and potentially across different compostables. Use rememberSaveable for simpler state persistence within a single compostable or for UI-specific state.
+
+—> To observe Flows in Jetpack compose you can use the collectAsState. This is the extension function allows you to convert a flow into a state that compose can observe and automatically recompose when the Flow emits a new value.
+
+—> To observe LiveData states in Jetpack compose, you can use the observeAsState. This extension function allows you to observe changes in LiveData objects and update the UI accordingly,
+
+—> Column -> VerticalList, Row —> HorizontalList
+
+—> The **Box** layout is a versatile container that allows you to overlay and stack elements. It's often used for creating custom UI components or overlays.
+
+—> The **Scaffold** layout is a higher-level layout that provides a structure for common UI elements like the app bar, floating action button, and more.
+
+### How to passing the data between screens?
+     1. Using Navigation Component
+
+                        @Composable
+                	fun NavGraph(startDestination: String = “screen1”)
+                	{
+                		val navController = rememberNavController()
+                    		NavHost(navController = navController, startDestination = startDestination)
+                		{
+                			composable(“screen1”){
+                					Screen1(navController)
+                				}
+                			composable(“screen2/{data}”, arguments = listOf(navArgument(“data”){ type = NavType.StringType}))
+                				{
+                					backStackEntry ->
+                					val data = backStackEntry.arguments?.getString(“data”)
+                					Screen2(data)
+                				}
+                		}
+                	}
+                
+                
+                    @Composable
+                	fun Screen1(navController: NavController)
+                	{
+                		Button(onClick = {
+                			navController.navigate(“screen2/HelloWorld”)})
+                			{	
+                				Text(“Go to Screen2”)
+                			}
+                		}
+                	}
+                
+                  @Composable
+                	fun Screen2(data: String?){
+                		Text(text = “Received data: $data”)
+                	}
+                
+                        2. Using ViewModel
+                	
+                	class sharedViewModel(): ViewModel(){
+                		private val _data = MutableLiveData<String>()
+                		val data: LiveData<String> = _data
+                
+                		fun setData(value: String){
+                			_data.value = value
+                		}
+                	}
+                
+                @Composable
+                	fun Screen1(viewModel: SharedViewModel = viewModel()){
+                		Button(onClick = { viewModel.setData(“Hello from Screen1”)})
+                		{
+                			Text(“Go to Screen2”)
+                		}
+                	}
+                
+                 @Composable
+                	 fun Screen2(viewModel: SharedViewModel = viewModel)
+                	{
+                		val data by viewModel.data.observeAsState()
+                		Text(text = “Received Data : $data”)
+                	}
