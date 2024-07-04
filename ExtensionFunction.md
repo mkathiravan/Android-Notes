@@ -58,3 +58,19 @@
             fun main() {
                Myclass.helloWorld()
             }
+
+### Example 4:
+
+            fun MutableList<Int>.swap(index1: Int, index2: Int): MutableList<Int>
+                {
+                    val tmp = this[index1]
+                    this[index1] = this[index2]
+                    this[index2] = tmp
+                    return this
+                }
+            fun main() {
+               val list = mutableListOf(5,10,15,20,25)
+               println("Before swapping the list:$list")
+               val result = list.swap(0,2)
+               println("After swapping the list: $result")
+            }
