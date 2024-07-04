@@ -39,3 +39,22 @@
             val excellentStatus = student.isExcellent(95)
             println("Student excellent status $excellentStatus")
         }
+
+### Example 3
+
+            class Myclass{
+                companion object{
+                    fun create(): String{
+                        return "Calling create method of companion object"
+                    }
+                }
+            }
+            
+            fun Myclass.Companion.helloWorld()
+            {
+                println("executing extension of companion object")
+            }
+            
+            fun main() {
+               Myclass.helloWorld()
+            }
