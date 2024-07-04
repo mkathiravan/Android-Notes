@@ -66,3 +66,20 @@
         fun main() {
             higherfunc(::add)
         }
+
+## Returning a function from Higher-Order function
+
+#### A function returning another function
+
+          fun mul(a: Int, b: Int): Int{
+              return a * b
+          }
+          fun higherfunc(): ((Int,Int) -> Int)
+          {
+              return :: mul
+          }
+          fun main() {
+              val multiply = higherfunc()
+              val result = multiply(2,4)
+              println("The multiplication of two number is: $result")
+          }
