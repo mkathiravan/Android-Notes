@@ -98,3 +98,29 @@ The output of the above program
         Object is not created yet
         Expensive object initialized
         Some expensive operation
+
+##### Lazy Initialization using synchronized
+
+---> The synchronized mode is the default for kotlin's lazy function. It ensures that the instance is created by only once, even if accessed by multiple threads simulataneously.
+
+        val instance: MyClass by lazy{
+                MyClass()
+        }
+
+#### Lazy initialization using Publication
+
+---> The publication mode allows multiple threads to initialize the property but only one of them will succeed and assign the value.
+
+        val instance: MyClass by lazy(LazyThreadSafetyMode.PUBLICATION)
+        {
+                MyClass()
+        }
+
+#### Lazy initialization without Synchronization
+
+---> The none mode does not provide any thread safety. This is useful when you are sure that the property will not be accessed by multiple threads at the same time.
+        
+        val instance: MyClass by lazy(LazyThreadSafetyMode.NONE)
+        {
+                MyClass()
+        }
