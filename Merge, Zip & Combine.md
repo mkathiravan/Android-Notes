@@ -59,3 +59,29 @@ If you run the above program then output would like as below
             3,C
             4,D
             5,E
+
+#### Combine:
+
+---> It takes multiple flows and combines their lastest values whenever any of the flows emits a new value. It emits value as soon as flow emits, using the latest value from each flow.
+
+       runBlocking {
+            val flow1 = flowOf(1,2,3,4,5).onEach { delay(2000) }
+            val flow2 = flowOf("A","B","C","D","E").onEach { delay(5000) }
+            val mergedFlow = flow1.combine(flow2){a,b->
+                println("$a,$b")
+            }
+            mergedFlow.collect{value->
+                println(value)
+            }
+        }
+
+If you run the above program then output would like as below
+
+        2,A
+        3,A
+        4,A
+        4,B
+        5,B
+        5,C
+        5,D
+        5,E
