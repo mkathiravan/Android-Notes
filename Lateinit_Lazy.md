@@ -11,7 +11,7 @@
 <img width="657" alt="Screenshot 2024-07-05 at 1 45 39 PM" src="https://github.com/mkathiravan/Android-Notes/assets/39657409/91f68011-99b7-4d78-aff2-7a3605057f4b">
 
 
-##### Example:
+##### Example 1: using lateinit keywork
 
         class Myclass{
             lateinit var name: String
@@ -43,3 +43,29 @@ The output of the above program would be like as below
       Name is not initialized
       Kotlin
         
+##### Example 2: using lazy keyword
+
+        class MyClass
+        {
+            val name: String by lazy{
+                println("Computed!")
+                "Kotlin"
+            }
+            
+            fun printName(){
+                println(name)
+            }
+        }
+        fun main() {
+            val myClass = MyClass()
+            println("Before accessing name")
+            myClass.printName()
+            myClass.printName()
+        }
+
+If you run the above program the output would like as below
+
+        Before accessing name
+        Computed!
+        Kotlin
+        Kotlin        
