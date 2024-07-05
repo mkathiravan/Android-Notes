@@ -151,5 +151,49 @@ The output of the above program is 13 .
 
 5. Return value: This extension function returns a new function. This new function takes a parameter of type P1, applies the receiver function(the first function) to it, and then applies the function f (the second function) to the result.
 
-   { p1: P1 -> f(this(p1))}: This is a lambda expression representing the new function. this(p1) calls the receiver function with p1, and f(..) applies the second function to the result of the first function.
+   { p1: P1 -> f(this(p1))}: This is a lambda expression representing the new function. this(p1) calls the receiver function with p1, and f(..) applies the second function to the result of the first function.   
 
+
+##### Example 2: Using Higher-Order Functions
+
+--> You can create a composite function by explicitly defining it within a higher-order function.
+
+        fun <P1, R1, R2> compose(f: (P1) -> R1, g: (R1) -> R2): (P1) -> R2 {
+            return { p1: P1 -> g(f(p1))}
+        }
+        fun multiplyBy2(x:Int): Int = x * 2
+        fun add3(x: Int): Int = x + 3
+        
+        fun main() {
+            val compositeFunction = compose(:: multiplyBy2, ::add3)
+            val result = compositeFunction(5)
+            println(result)
+        }
+
+
+##### Example 3: Function Composition with Lambda
+
+--> You can also use lambdas directly for function composition.
+
+        val multiplyBy2: (Int) -> Int = { it * 2}
+        val add3: (Int) -> Int = { it + 3}
+        
+        val multiplyBy2AndAdd3 = { x: Int -> add3(multiplyBy2(x))}
+        
+        fun main() {
+            val result = multiplyBy2AndAdd3(5)
+            println(result)
+        }
+
+
+##### Example 4: Using the let Function for Composition
+
+---> Kotlin's standard library provides the let function, which can be used for simple compositions.
+
+        fun multiplyBy2(x: Int): Int = x * 2
+        fun add3(x: Int): Int = x + 3
+        
+        fun main() {
+            val result = 5.let(::multiplyBy2).let(::add3)
+            println(result)
+        }
