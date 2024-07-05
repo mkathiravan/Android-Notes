@@ -98,3 +98,58 @@ iii)Function-like Objects:
         println(operation(10,5, addFunction))
         println(operation(10,5, multiplyFunction))
     }
+
+
+#### Tail Recursion:
+
+---> It allows a function to call itself as its last action without building up a new stack frame for each call. This is to avoiding stack overflow errors for large input values.
+
+        tailrec fun factorial(n: Int, result: Int = 1): Int
+        {
+            return if(n == 0){ result } else { factorial(n-1, result *n)}
+        }
+        fun main() {
+           val number = 5
+           println("Factorial of $number using tail recursion: ${factorial(number)}") 
+        }
+
+ If you run the above program the output is
+
+        120
+
+#### Composition Function
+
+---> In kotlin you can create composite functions by combining two or more functions into single function. This is typically done using higher-order functions. Below are some examples demonstrating how to create and use composite functions in kotlin.
+
+###### Example 1: Using Function Composition
+
+        infix fun <P1, R1, R2> ((P1) -> R1).andThen(f: (R1) -> R2): (P1) -> R2
+        {
+            return { p1: P1 -> f(this(p1))}
+        }
+        
+        fun multiplyBy2(x:Int): Int = x * 2
+        fun add3(x: Int): Int = x + 3
+        
+        fun main() {
+            val multiplyBy2AndAdd3 = ::multiplyBy2 andThen ::add3
+            val result = multiplyBy2AndAdd3(5)
+            println(result)
+        }
+
+The output of the above program is 13 .
+
+**Explaination**      
+
+1. infix keyword: This allows the function to be called using infix notation, meaning you can write a andThen b instead of a.andThen(b)
+
+2. <P1, R1, R2>: P1 is the input type of the first function. R1 is the output type of the first function and the input type for the second function. R2 is the output type of the second function.
+
+3. ((P1) -> R1) : This is receiver type of the extension function. It means this function extends any function that takes a parameter of type P1 and returns a value of type R1.
+
+4. f:(R1) -> R2: This is the parameter of the andThen function. It is a function that takes a parameter of type R1(the output of the first function) and returns a value of type R2.
+
+5. Return value: This extension function returns a new function. This new function takes a parameter of type P1, applies the receiver function(the first function) to it, and then applies the function f (the second function) to the result.
+
+   { p1: P1 -> f(this(p1))}: This is a lambda expression representing the new function. this(p1) calls the receiver function with p1, and f(..) applies the second function to the result of the first function.
+
