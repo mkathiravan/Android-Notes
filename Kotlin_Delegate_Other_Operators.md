@@ -48,3 +48,53 @@ If you run the above program the output would be like as below
       0
       10
       10
+
+### Invoke operator (Delegate Function)
+
+---> In Kotlin, the invoke operator allows you to call an object as if it were a function. This means you can use parentheses () directly after an object reference to trigger a specific behavior defined within the object's invoke function.
+
+##### Example 1:
+
+        class Greeter {
+            operator fun invoke(name: String) {
+                println("Hello, $name!")
+            }
+        }
+        
+        fun main() {
+            val greeter = Greeter()
+            println(greeter("Kathiravan"))
+        }
+
+The output of the above program is
+
+    Hello, Kathiravan!
+
+**Benefits of the invoke operator:**
+
+ i)Readability and Conciseness:
+    It allows for a more natural and expressive syntax, making code easier to read and write.
+    
+ ii) DSL Creation:
+    It is commonly used in creating Domain-Specific Languages (DSLs), providing a more fluent and intuitive way to interact with the DSL's       constructs.
+    
+iii)Function-like Objects:
+    It allows objects to behave like functions, enabling functional programming paradigms.
+
+
+##### Example 2: 
+
+    fun operation(a: Int, b: Int, operation: (Int, Int) -> Int): Int
+    {
+        return operation(a,b)
+    }
+    fun sum(a: Int, b: Int): Int = a+b
+    fun multiply(a: Int, b: Int): Int = a * b
+    
+    fun main() {
+        val addFunction: (Int, Int) -> Int = ::sum
+        val multiplyFunction: (Int, Int) -> Int = :: multiply
+        
+        println(operation(10,5, addFunction))
+        println(operation(10,5, multiplyFunction))
+    }
