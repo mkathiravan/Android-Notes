@@ -69,3 +69,32 @@ If you run the above program the output would like as below
         Computed!
         Kotlin
         Kotlin        
+
+#### Example 3: using lazy keyword
+
+                class ExpensiveObject{
+                    init{
+                        println("Expensive object initialized")
+                    }
+                    fun someExpensiveFunction()
+                    {
+                        println("Some expensive operation")
+                    }
+                }
+                class Example
+                {
+                    val lazyObject: ExpensiveObject by lazy{
+                        ExpensiveObject()
+                    }
+                }
+                fun main() {
+                    val obj = Example()
+                    println("Object is not created yet")
+                    println(obj.lazyObject.someExpensiveFunction())
+                }
+
+The output of the above program 
+
+        Object is not created yet
+        Expensive object initialized
+        Some expensive operation
