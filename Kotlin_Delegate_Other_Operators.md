@@ -197,3 +197,50 @@ The output of the above program is 13 .
             val result = 5.let(::multiplyBy2).let(::add3)
             println(result)
         }
+
+### Infix Functions: 
+
+---> It is a function that is marked with the infix keyword and is called using infix notation, without the dot and parentheses.
+
+            infix fun Int.minus(other: Int): Int
+            {
+                return this - other
+            }
+            fun main() {
+                val result = 5 minus 3
+                println(result)
+            }
+
+  The output of the above program is 2.
+
+  
+### Type Aliases:
+
+---> It is a way to give an existing type a new name. It provides an alternative naming to your existing type to reflect a more readable code.
+
+---> Type Aliases should be declared from the top level of our kotlin code and not like inside of a class or a function.
+
+##### Example 1
+
+        typealias Drawable = R.drawable
+        typealias Layout = R.layout
+        setContentView(Layout.activity.main)
+        Img.Drawable(this, Drawable.file_name)
+
+##### Example 2
+
+        typealias str = String
+        fun main()
+        {
+            val name: str = "Kathiravan"
+            println(name)
+        }
+
+##### Example 3
+
+        class UniqueIdentifier(var value: String)
+        typealias uid = UniqueIdentifier
+        fun main() {
+            val userId = uid("0001")
+            println(userId.value)
+        }
