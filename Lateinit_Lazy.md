@@ -11,3 +11,35 @@
 <img width="657" alt="Screenshot 2024-07-05 at 1 45 39 PM" src="https://github.com/mkathiravan/Android-Notes/assets/39657409/91f68011-99b7-4d78-aff2-7a3605057f4b">
 
 
+##### Example:
+
+        class Myclass{
+            lateinit var name: String
+            
+            fun initializeName()
+            {
+                name = "Kotlin"
+            }
+            fun printName(){
+                if(::name.isInitialized)
+                {
+                    println(name)
+                }
+                else
+                {
+                    println("Name is not initialized")
+                }
+            }
+        }
+        fun main() {
+            val myClass = Myclass()
+            myClass.printName()
+            myClass.initializeName()
+            myClass.printName()
+        }
+
+The output of the above program would be like as below
+
+      Name is not initialized
+      Kotlin
+        
