@@ -4,6 +4,8 @@
 
 --> The launch coroutine builder is used to start a new coroutine that does not return a result. It is used for fire-and-forget tasks or tasks that don't need to return a value.
 
+---> It launching a corroutine that does not return a result
+
          runBlocking {
             val job = launch {
                 delay(20000L)
@@ -24,6 +26,8 @@ If you run the above program the output would be like as
 
  --> It is used to start a new coroutine that performs a potentially asynchronous operation and returns a Deferred object representing the result of that operation. async is often used in scenarios where one wants to perform multiple concurrent tasks and retrieve their results asynchronously.
 
+---> For launching corroutine that returns a result
+
             runBlocking {
                 val deferred: Deferred<String> = async {
                     delay(20000L)
@@ -42,6 +46,8 @@ If you run the above program the output would be like as
 #### runBlocking:
 
 --> The runBlocking coroutine builder, blocks the main thread until each of the coroutine's tasks completed, that the main thread is created. We normally use runBlocking in the main thread when we are running tests to ensure the test doesn't end. It is Not Recommended in the real time scenario.
+
+--> For blocking the current thread until the coroutine completes.
 
             runBlocking {
                 println("Start of runBlocking")
@@ -62,6 +68,8 @@ If you run the above program the output would be like as
 
 --> The withContext coroutine builder in Kotlin switches a coroutine's execution context to a different dispatcher, which defines the thread or thread pool where the coroutine will run.
 
+---> For switching the corroutine context.
+
           runBlocking {
               println("Start of runBlocking")
               withContext(Dispatchers.IO){
@@ -80,6 +88,8 @@ If you run the above program the output would be like as
 ### produce:
 
 --> It is used to create a coroutine that produces a stream of elements. It's similar to a generator or iterator in other programming languages, allowing you to emit values from the coroutine and consume them using a receive() function.
+
+---> For creating a corroutine that produces a stream of values.
 
                   runBlocking {
                       val channel: ReceiveChannel<Int> = produce {
@@ -107,6 +117,8 @@ If you run the above program the output would be like as
 
  --> Actors are a combination of a Coroutine and a Channel. You can send information off to an actor. The actor operates within a Coroutine and reads from that channel to process work. Channels are the way for you to communicate safely between Coroutines.
 
+---> For creating an actor coroutine to process message sequentially.
+
                   runBlocking {
                       val actor = actor<Int> {
                           for(msg in channel)
@@ -132,6 +144,8 @@ If you run the above program the output would be like as
 #### SupervisorScope
 
 ---> In Kotlin Coroutines, supervisorScope is a coroutine builder function that creates a new coroutine scope with a different error-handling strategy than coroutineScope.
+
+---> For creating a corroutine scope with supervisorJob to manage child coroutines independently
                   
                   runBlocking {
                       supervisorScope {
