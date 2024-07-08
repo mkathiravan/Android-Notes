@@ -185,3 +185,7 @@ iv) **Context preservation**
             viewModelScope.launch{
                   repository.getData().catch().collect{}
             }
+
+#### Backpressure Handling:
+
+ ---> RxJava has built-in support for backpressure. It provides operators like onBackpressuredBuffer, onBackpressureDrop or onBackpressureLatest. Kotlin flow natively supports backpressure. The buffer and conflate operators can be used to control buffering and dropping of items.
