@@ -31,3 +31,15 @@
 
     iii) If the parent object is destroyed, then the child object is also destroyed.
 
+
+## UML Diagram(Unified Modeling Language)
+
+---> It is used to visualize the design of a system. It can help in understanding the architecture, relationships between different components and the overall structure of the applications. There are various types of UML Diagram.
+
+  **i)Class Diagram** : It shows the structure of the system classes, their attributes, methods  and the relationship among objects.
+
+  **ii)Sequence Diagram**: It shows how objects interact in a particular scenario of use case. It is a type of interaction diagram that shows how processes operate with one another and in what order.
+
+  **iii)Activity Diagram**: It represents the flow of activities or actions in a system. It is used to show the workflow from one activity to another.
+
+  **iv)Component Diagram**: It shows how a system is split up into components and how they interact with each other. It helps in understanding the high-level structure of the system.
