@@ -43,3 +43,5 @@
   **iii)Activity Diagram**: It represents the flow of activities or actions in a system. It is used to show the workflow from one activity to another.
 
   **iv)Component Diagram**: It shows how a system is split up into components and how they interact with each other. It helps in understanding the high-level structure of the system.
+
+
