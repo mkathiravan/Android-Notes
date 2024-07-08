@@ -69,3 +69,11 @@ It has **4** interfaces:
 ----> **SubscribeOn()** decides on which thread source observable will run. This is useful to decide whether to run the sourcce in the main thread or background thread.
 
 ----> **observeOn** decides on which thread downstream operators will run. This is useful for switching thread between two operators.
+
+### Subject in RxJava:
+
+---> A subject extends an observable and implements observer at the same time. It acts as an observable to clients and registers to multiple events taking place in the app. It acts as an observer by broadcasting the event to multiple subscribers.
+
+ ---> Subjects can acts as both an observer and an observable.
+
+ ----> Subjects are considered as HOT observables.
