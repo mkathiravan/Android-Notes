@@ -154,3 +154,18 @@ It has **4** interfaces:
  **ii)Emitted Observable**: map returns the transformed item directly, whereas flatMap returns an Observable that emits the transformed items.
 
  **iii)Concurrency**: flatMap is useful for handling asynchronous operations and can interleave the emissions from multiple Observables.
+
+
+### Difference between RxJava & Kotlin Flow
+
+**i)Simplicity**: While create of emittion kotlin has flow{} builder to create any kind of flow & emit but RxJava have different type of streams like Flowable, Observable, Publisher and may others making it difficult to decide which one to use in use-case.
+
+ii)**Asynchornous Transformation / Filtering operators:**
+      RxJava  different methods to transform data considering if data need to transformed in synchornous & asynchrnous code. RxJava map method is used in synchronous code and faltMapSingle is requireed asynchronous code. But in Kotlin transforms & filter accept suspend function which enables tem to work for both asynchrnous & synchronous code.
+
+iii)**Backpressure support:**     
+      Flows are declartive. Once you create a flow it does not start emitting values unless you start collecting flow values. Emitting & collecting works in a sequence whereas RxJava backpressure needs to be handled explicitly providing backpressure strategy.
+
+iv) **Context preservation**
+      RxJava provides subscirbOn & observeOn method to change executing context of the code where as kotlin flow context is preserved, that means the called method does not change the context of the caller.
+
