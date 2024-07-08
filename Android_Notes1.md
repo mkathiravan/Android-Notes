@@ -66,6 +66,25 @@
       v) Non-Functional Requirements: Considerations like performance, scalability.
       
 
+## (LLD)
+
+   **Purpose**: Provide detailed view of the system implementations.
+
+  **Focus**: Describes the implementation details of each components, including classes, methods and data structures.
+
+  **Audience**: Primarily for developers and software engineers who will implement the system.
+
+  **Components:**
+
+      i) Class Diagrams: Detailed diagrams showing classes, their attributes, methods, and relationships.
+
+      ii) Sequence Diagrams: Diagrams showing how objects interact in a particualr scenario of a use case.
+
+      iii) State Diagrams: Representing the states of objects and their transitions.
+
+      iv) Detailed Algorithms: Pseudocode or detailed description of the algorithms used.
+
+      v) Database Schema: Detailed design of the databse tables, their relationships and constraints.
  
  ##### Example of HLD:
 
