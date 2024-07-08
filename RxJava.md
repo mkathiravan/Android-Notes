@@ -77,3 +77,38 @@ It has **4** interfaces:
  ---> Subjects can acts as both an observer and an observable.
 
  ----> Subjects are considered as HOT observables.
+
+  Types of subjects are as below
+
+  i) **Publish Subject**:
+
+    ---> It emits all the subsequent items of observable at the time of subscription.
+
+    Example: 
+
+          If a student entered late into the classroom, he just want to listen from that point of time when he entered the classroom. So, publish will be the best usecase.
+
+  ii) **Replay Subject**
+
+    ---> It emits all the items of the source observable regardless of when the subscriber subscribes.
+
+    Example:
+
+          If a student entered late into the classroom, he want to listen from the begining. So, here we will use replay.
+
+  iii) **Behaviour Subject**     
+
+      ---> It emits the most recently emitted item and all the subsequent items of the source observable when an observer subscribe to it.
+
+      Example:
+
+            If a student entered late into the classroom, he wants to listen to the most recent things(not from the begining) being taught             by professor so that he gets the idea of context.
+
+  iv) **Async Subject**
+
+        ---> It emits the last value of the source observable (and only the last value) only after that source observable completes.
+
+        Example:
+
+              If a student entered the classroom at any point in time, and wants to listen only to the last thing(and only the last thing)                being taught after a class is over. So we will use async.
+  
