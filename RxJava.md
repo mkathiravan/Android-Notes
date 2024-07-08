@@ -112,3 +112,45 @@ It has **4** interfaces:
 
               If a student entered the classroom at any point in time, and wants to listen only to the last thing(and only the last thing)                being taught after a class is over. So we will use async.
   
+
+##### Difference between Map and FlatMap in RxJava?
+
+ ----> In RxJava, map and flatMap are both operators used to transform items emitted by an Observable, but they hae different behaviours and use cases:
+
+**map:**
+
+ ---> **Purpose**: Transforms each item emitted by an Observable by applying a function to it.
+
+ ---> **Output**: Emits a single value for each input value.
+
+ ---> **Usage**: Use map when each item can be independently transformed.
+
+   **Example:**
+
+         Observable<Integer> observable = Observable.just(1,2,3);
+         obseravable.map(item -> item * 2).subscribe(System.out::println);
+
+   The output of the above program is 2,4,6
+
+**flatMap:**    
+
+---> **Purpose**: Transforms each item emitted by an Observable into an Obseravble itself, then flattens those observables into single Observable.
+
+---> **Output**: Emits multiple values for each input value
+
+---> **Usage**: Use flatMap when each item can be transformed into an Observable that emits more than one value or when you need to perform asynchronous operation.
+
+   **Example:**
+
+        Observable<Integer> observable = Observable.just(1,2,3);
+        observable.flatMap(item -> Observable.just(item * 2, item * 3)).subscribe(System.out::println);
+
+    The output of the above program is 2,3,4,6,6,9
+    
+###### Key Differences of Map and FlatMap
+
+ **i)Transformation**:  map transforms items one-to-one, while flatMap can transform items one-to-many.
+
+ **ii)Emitted Observable**: map returns the transformed item directly, whereas flatMap returns an Observable that emits the transformed items.
+
+ **iii)Concurrency**: flatMap is useful for handling asynchronous operations and can interleave the emissions from multiple Observables.
