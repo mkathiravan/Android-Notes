@@ -45,3 +45,26 @@
   **iv)Component Diagram**: It shows how a system is split up into components and how they interact with each other. It helps in understanding the high-level structure of the system.
 
 
+## High-Level Design (HLD)
+
+  **Purpose**: Provides an overview of the system architecture and design.
+
+  **Focus**: Describes the sytem's architecture, components, modules and their interactions. It also includes the technology stack, frameworks and tools to be used.
+
+  **Audience**: Typically for project managers, stakeholders, and senior developers.
+
+  **Components:**
+
+      i) System Architecuture: Overview of the architecture, such as MVP, MVVM, Clean Architecture.
+
+      ii) Modules and Layers: How application is divided into different layers or modules.
+
+      iii) Component Interaction: Interaction between different modules and components.
+
+      iv) Technology Stack: The technologies, libraries and framework to be used.(Ex: Retrofit, Room)
+
+      v) Non-Functional Requirements: Considerations like performance, scalability and security.
+
+
+ 
+
