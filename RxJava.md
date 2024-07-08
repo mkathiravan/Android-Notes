@@ -47,6 +47,18 @@ It has **4** interfaces:
 
 ----> observable.just() emits only once whereas observable.from() emits n-times the length of the array.
 
+            Ex: 
+             fun main()
+             {
+                  Observable.just(Data.users).subscribe{ println(it) }
+             }
+      
+           Ex: 
+             fun main()
+             {
+                 Observable.fromIteratable(Data.users).subscribe{ println(it) } 
+             }
+
 ##### Difference between timer() and intervals()
 
 ----> Timer() emits just a single item after a delay.
@@ -54,4 +66,6 @@ It has **4** interfaces:
 ----> interval() emit items spaced out with a given interval.
 
 
-    
+----> **SubscribeOn()** decides on which thread source observable will run. This is useful to decide whether to run the sourcce in the main thread or background thread.
+
+----> **observeOn** decides on which thread downstream operators will run. This is useful for switching thread between two operators.
