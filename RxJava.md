@@ -189,3 +189,97 @@ iv) **Context preservation**
 #### Backpressure Handling:
 
  ---> RxJava has built-in support for backpressure. It provides operators like onBackpressuredBuffer, onBackpressureDrop or onBackpressureLatest. Kotlin flow natively supports backpressure. The buffer and conflate operators can be used to control buffering and dropping of items.
+
+
+##### Observable Types:
+
+   i) Observable ii) Flowable iii) Single iv) Maybe v) Completable
+
+   As the different types of observables, there are different types of observable also.
+
+  i)Observer ii) SingleObserver iii) MaybeObserver iv) CompletableObserver
+
+  **Observable**: This is simplest observable which can emit more than one value.
+
+  **Flowable**: When there is a case that the observable is emitting huge numbers of values that can't be consumed by the consumer. In this case observable needs to be skip some values on the basis of some strategy else it will throw an exception. The strategy is called BackpressureStrategy and the exception is called missing backpressure exception.
+
+ **Single**: It is used when the observable has to emit only one value like a response from a network call.
+
+  **maybe**: It is used when the observable has to emit a value or no value.
+
+  **Completable**: It is used when the observable has to do some task without emitting value.
+  
+
+### RxJava Backpressure Strategy:
+
+ ---> When the observer is not able to consume items as quickly as they are produced by an observable they need to be buffered or handled is some other way, as they will fill up the memory finally and causing **OutofMemoryException**.
+
+ ##### Backpressure handling in RxJava:
+
+   **i) Buffering overproducing observable:**
+
+   ---> We can do it by calling a buffer() method.
+
+   Example:
+
+         PublishSubject<Integer> source = PublishSubject.<Integer>.create()
+         source.buffer(1024).observeOn(Schedulers.computation()).subscribe(computation::compute, Throwable::printstackTrace)
+
+
+**ii) Batching Emitted items:**
+
+  ---> We can batch overproduced items in windows of N elements.
+
+  Example:
+
+        PublishSubject<Integer> source = PublishSubject.<Integer>create();
+        source.window(500).observeOn(Schedulers.computation()).subscribe(computation::compute, Throwable::printstackTrace)
+
+
+**iii) Skipping Elements:**     
+
+---> If some of the values produced by observable can be safely ignored. We can use the sampling within a specific time and throttling operators.
+
+ ---> The method sample() and throttleFirst() are taking duration as a parameter.
+
+  a) The sample() mehtod periodically looks into the sequence of elements and emits the last item that was produced within the duration specified as a parameter.
+
+ b) The throttleFirst() method emits the first item that was produced after the duration specified as a parameter.
+
+       Example:
+
+             PublishSubject<Integer> source = PublishSubject.<Integet>create()
+             source.sample(100, TimeUnit.MILLISECONDS).observeOn(Schedulers.computation()).subscribe(computeFunction::compute,                           Throwable::printstacktrace)
+
+
+  **iv) Handling a Filling observable buffer:**    
+
+  ---> We need to use on onBackpressureBuffer() method to prevent BufferOverflowException.
+
+ There are 4 types of actions that can be executed when the buffer fills up.
+
+    a)ON_OVERFLOW_ERROR: This is the default behavior signaling a BufferOverFlowException when the buffer is full.
+
+    b)ON_OVERFLOW_DEFAULT: Currently it is the same as ON_OVERFLOW_ERROR
+
+    c)ON_OVERFLOW_DROP_LATEST: If an overflow would happen, the current value will be simply ignored and only the old values will be delivered once the downstream observer requests.
+
+    d)ON_OVERFLOW_DROP_OLDEST: Drop the oldest element in the buffer and adds the current value to it.
+
+          Example:
+
+                Observable.range(1, 10000)
+                .onBackpressureBuffer(16, () -> {}, BackpressureOverflow.ON_OVERFLOW_DROP_OLDEST)
+                .observeOn(Schedulers.computation())
+                .subscribe(e -> {}, Throwable::printStackTrace);
+
+
+**v) Dropping all overproduced elements:**    
+
+ ----> We can use onBackpressureDrop() method.
+
+   Example:
+
+         Observable.range(1, 100000).onBackPressureDrop().onObserveOn(Schedulers.computation())
+               .doOnNext(computeFunction::compute)
+               .subscribe(v-> {}, Throwable::printStackTrace)
