@@ -63,8 +63,54 @@
 
       iv) Technology Stack: The technologies, libraries and framework to be used.(Ex: Retrofit, Room)
 
-      v) Non-Functional Requirements: Considerations like performance, scalability and security.
-
+      v) Non-Functional Requirements: Considerations like performance, scalability.
+      
 
  
+ ##### Example of HLD:
+
+    1. Architecture Choice: Deciding to use MVVM.
+
+    2. Modules: 
+
+        UI Layer: Activities and Fragments.
+
+        ViewModel Layer: ViewModel classes.
+
+        Repository Layer: Hanldes data operations.
+
+        Data Layer: Room Database, Retrofit for API calls.
+
+   3. Technology Stack: Kotlin, Android Jetpack components, Retrofit, Room, LiveData
+
+      
+##### Example of LLD:
+
+     1. Class Diagram:
+
+         MainActivity: Handles user interaction
+
+         MainViewModel: Provides data to the UI
+
+         UserRepository: Manages data from API and local database.
+
+         User: Data Model class
+
+
+    2. Sequence Diagram:
+
+        User clicks a button ->
+
+        MainActivity calls MainViewModel  -> MainViewModel request data from UserRepository -> UserRepository fetches data from     
+        API/Database -> Data is returned and displayed in MainActivity.
+
+    3. State Diagram:
+
+        State of a network request: idle, loading, success, error
+
+    4. Database Schema:
+
+        Table: Users
+
+        Columns: id, name, email
 
