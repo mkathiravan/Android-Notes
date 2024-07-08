@@ -1,3 +1,17 @@
+## Flow in Kotlin
+
+---> In Kotlin, Flow is a part of the Kotlin Cororutines library and is designed to handle asynchronous data streams. It is similar to LiveData but more powerful and flexible. Flow is built on coroutines and can be used to represent a stream of values that are computed asynchornously.
+
+#### Key Freatures of Flow:
+
+1. **Cold Streams**: A flow doesn't start emitting values until it is collected. Each time you call collect on a Flow, a new sequence of values is emitted.
+
+2. **Backpressure Handling**: Flow supports suspending functions and operators to ensure smooth handling of backpressure, where the producer and consumer of data might operate at different speeds.
+
+3. **Cancellation**: A Flow respects coroutine cancellation, which means that is can be safely cancelled without causing resource leaks.
+
+
+
 ### StateFlow:
 
 ---> Stateflow takes an initial value through constructor and emits it immediately when someone starts collecting. Stateflow is identical to LiveData. LiveData automatically unregisters the consumer when the view goes to the STOPPED state. When collecting a StateFlow this is not handled automatically , you can use repeatOnLifeCyCle scope if you want to unregister the consumer on STOPPED state. If you want current state use stateflow(.value).
@@ -77,3 +91,12 @@ If you run the above program and the output would like as below
       Collector2_Received 0
       Collector2_Received 4
       Collector1_Received 4
+
+
+##### What are the differences between StateFlow and LiveData?
+
+---> For LiveData you are not forced to give an initial value, it may end up writing more code in init{}; But for StateFlow you are Forced to give an initial value (including null), it may save your code a bit.
+
+---> For LiveData even if you give an initial value, you still need to do Null Check when you access its value (see this), it's kind of annoying. But that's not gonna happen on StateFlow - it will be what it should be.
+
+---> For LiveData you cannot easily, or elegantly observe data changes JUST inside ViewModel, you are gona use observeForever() which is also mentioned in here.
