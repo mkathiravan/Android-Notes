@@ -169,3 +169,19 @@ iii)**Backpressure support:**
 iv) **Context preservation**
       RxJava provides subscirbOn & observeOn method to change executing context of the code where as kotlin flow context is preserved, that means the called method does not change the context of the caller.
 
+
+##### Example: RxJava
+            //repository method
+            fun getData() = room.readData().subscribeOn(Schedulers.io())
+
+            //Usage of insideViewModel
+            repository.getData().observeOn(AndroidSchedulers.mainThread()).subscribeBy(onSuccess = {}, onError = {})
+
+##### Example: Kotlin Flow
+            // repository method
+            fun getData() = room.readData().flowOn(Dispatchers.IO)
+
+            //Usage of insideViewModel
+            viewModelScope.launch{
+                  repository.getData().catch().collect{}
+            }
