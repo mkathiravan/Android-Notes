@@ -1,3 +1,19 @@
+### StateFlow:
+
+---> Stateflow takes an initial value through constructor and emits it immediately when someone starts collecting. Stateflow is identical to LiveData. LiveData automatically unregisters the consumer when the view goes to the STOPPED state. When collecting a StateFlow this is not handled automatically , you can use repeatOnLifeCyCle scope if you want to unregister the consumer on STOPPED state. If you want current state use stateflow(.value).
+
+---> If we want to convert MutableStateFlow into StatFlow use **variable.asStateFlow()**
+
+### SharedFlow:
+
+---> StateFlow only emits last known value , whereas sharedflow can configure how many previous values to be emitted. If you want emitting and collecting repeated values , use sharedflow.
+
+---> It does not have an initial value, and you can configure its replay cache to store a certain number of previously emitted values for new collectors.
+
+Note on terminology: just as we use the term observer for LiveData and collector for cold flows, we use the term subscriber for SharedFlow.
+
+
+
 <img width="712" alt="Screenshot 2024-07-05 at 9 22 51 PM" src="https://github.com/mkathiravan/Android-Notes/assets/39657409/4504bde2-4930-461f-921b-621083a6f368">
 
 ##### Example 1: Shared Flow
