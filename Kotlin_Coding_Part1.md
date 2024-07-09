@@ -1,4 +1,4 @@
-### EXample 1:
+### Example 1:
 
      suspend fun showProfile() = CoroutineScope{
          val profile = fetchProfile()
@@ -26,4 +26,29 @@ Instead of using Job builder, we should start this coroutine in an appropriate s
          viewModelScope.launch{
              showProfileImage(fetchImage(profile))
          }
+     }
+
+
+### Example 2:
+
+     suspend fun sendEmail(email: List<String>) = withContext(SupervisorJob + Dispatchers.IO)
+     {
+          email.forEach{
+             launch{
+                  sendEmail(it)
+             }  
+          }
+     }
+
+The above program was incorrect when you are handling SupervisorJob so correct way as below
+
+     suspend fun sendEmail(email: List<String>) = withContext(Dispatchers.IO)
+     {
+          supervisorScope{
+          email.forEach{
+             launch{
+                  sendEmail(it)
+             }  
+          }
+          }    
      }
