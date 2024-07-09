@@ -1,3 +1,12 @@
+## UnderStanding Dagger
+
+ ---> 4 Major components
+
+    Module
+    Component
+    Provides
+    Inject
+
 ### Qualifier
 
 ---> Consider an example where we have two functions returning String values. But while providing it via Dagger, how would dagger know which class needs which string values as they both are of the same type.
