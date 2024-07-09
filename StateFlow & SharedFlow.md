@@ -59,97 +59,103 @@
                  }
                 }
 
-iv) Long-Running Operations with Progress Updates:
+#### iv) Long-Running Operations with Progress Updates:
 
- Update the UI with progress during long-running tasks. Use flowOf and emit to periodically send progress updates.  fun downloadFile(): Flow<Int>
-{
-   return flow{
-	for(I in 0..100){
-		delay(100) 		emit(i)
-	}
-  }
-}
+--->  Update the UI with progress during long-running tasks. Use flowOf and emit to periodically send progress updates.  
 
-v) Error-Handling and Cancellation:
-
- Flows allow for proper error handling and cancellation using catch and onEach. Error Mgmt using catch and Cancellation use onEach.    fun getUsers(): Flow<List<User>>
-{
-    return flow {
-	val response = RetrofitInstance.api.getData()
-        if(response.isSuccessful){
-		emit(response.body()!!)
-	} else{
-		throw Exception(“Failed to fetch users”)
-	}
- } .catch {emit (emptyList())}
-
-}
-
-vi) Event Handling with SharedFlow
-
-Centralized Events: Manage events like button clicks or network state changes in a single source.
-
-  private val _networkState = MutableSharedFlow<NetworkState>()
-  val networkState : SharedFlow<NetworkState> = _networkState.asSharedFlow()
-
-  fun onNetworkChange(state: NetworkState)
-  {
-	_networkState.tryEmit(state)
-  } 
-
-
-vii) Caching Data with Flow Caching Strategies:
-
-  Offline-First Approach: Improve user experience by displaying cached data while fetching fresh updates.    Flow Caching Power: Utilise operators like cache and conflateLatest for data caching. 
-
-   fun getPosts(): Flow<List<Post>>{
-	return flow{
-		val cachedPosts = getPostsFromLocal()
-		if(cachedPosts.isNotEmpty()){
-			emit(cachedPosts)
+		fun downloadFile(): Flow<Int>
+		{
+		   return flow{
+			for(I in 0..100){
+				delay(100) 		emit(i)
+			}
+		  }
 		}
-		val networkPosts = fetchData().map{ it.toPostList()}
-		emitAll(networkPosts)
-	}
-	.cache() //Cache the entire flow for subsequent collection
-	.conflateLatest() // Only emit the latest network data if multiple emissions occur
- }
 
-viii) Testing Asynchronous Code with Flow Test Operators:
+#### v) Error-Handling and Cancellation:
 
- Use operators like test and flowOf to create mock flows for unit testing
-
-   @RunWith(AndroidJUnit4::class)
-   Class MyViewModelTest
-  {
-	@Test
-	fun `fetchUser emits data successfully`()
-{
-	val mockFlow = flowOf(listOf(User(“John Doe”)))
-        val viewModel = MyViewModel(FakeRepository(mockFlow))
-	viewModel.users.test{
-		val values = awaitValue()
-		assertThat(values, contains(User(“John Doe”)))
-                finish()
-	}
-}
-	
- }
-
-ix) Streamlining Long-Running Operations with Flow Operators:
+ ---> Flows allow for proper error handling and cancellation using catch and onEach. Error Mgmt using catch and Cancellation use onEach.    
  
-Manage multi-step operations with intermediate processing and error handling. Utilise operators like flatMapConcat, zip, and transform for complex flow manipulation.    fun downloadAndProcessFile(url: String) : Flow<String>
-{
-    return flow {
-		val downloadedFile = downloadFile(url)
-		val processedData = downloadedFile
+		 fun getUsers(): Flow<List<User>>
+		{
+		    return flow {
+			val response = RetrofitInstance.api.getData()
+		        if(response.isSuccessful){
+				emit(response.body()!!)
+			} else{
+				throw Exception(“Failed to fetch users”)
+			}
+		 } .catch {emit (emptyList())}
+		
+		}
+
+**vi) Event Handling with SharedFlow**
+
+---> Centralized Events: Manage events like button clicks or network state changes in a single source.
+	
+	  private val _networkState = MutableSharedFlow<NetworkState>()
+	  val networkState : SharedFlow<NetworkState> = _networkState.asSharedFlow()
+	
+	  fun onNetworkChange(state: NetworkState)
+	  {
+		_networkState.tryEmit(state)
+	  } 
+
+
+#### vii) Caching Data with Flow Caching Strategies:
+
+  ---> Offline-First Approach: Improve user experience by displaying cached data while fetching fresh updates.    Flow Caching Power: Utilise operators like cache and conflateLatest for data caching. 
+
+	   fun getPosts(): Flow<List<Post>>{
+		return flow{
+			val cachedPosts = getPostsFromLocal()
+			if(cachedPosts.isNotEmpty()){
+				emit(cachedPosts)
+			}
+			val networkPosts = fetchData().map{ it.toPostList()}
+			emitAll(networkPosts)
+		}
+		.cache() //Cache the entire flow for subsequent collection
+		.conflateLatest() // Only emit the latest network data if multiple emissions occur
+	 }
+
+#### viii) Testing Asynchronous Code with Flow Test Operators:
+
+ --> Use operators like test and flowOf to create mock flows for unit testing
+
+		   @RunWith(AndroidJUnit4::class)
+		   Class MyViewModelTest
+		  {
+			@Test
+			fun `fetchUser emits data successfully`()
+		{
+			val mockFlow = flowOf(listOf(User(“John Doe”)))
+		        val viewModel = MyViewModel(FakeRepository(mockFlow))
+			viewModel.users.test{
+				val values = awaitValue()
+				assertThat(values, contains(User(“John Doe”)))
+		                finish()
+			}
+		}
+			
+		 }
+
+#### ix) Streamlining Long-Running Operations with Flow Operators:
+ 
+---> Manage multi-step operations with intermediate processing and error handling. Utilise operators like flatMapConcat, zip, and transform for complex flow manipulation.    
+
+		fun downloadAndProcessFile(url: String) : Flow<String>
+		{
+		    return flow {
+				val downloadedFile = downloadFile(url)
+				val processedData = downloadedFile
 							.flatMapConcat { bytes -> processBytes(bytes)} 
 							.zipWith(getAdditionalData()) {data, additional -> combineData(data, additional)}
 							.transform {it.toUpperCase()}
-				emit(processedData)
-	}.catch {emitException(it)}
-
-}
+						emit(processedData)
+			}.catch {emitException(it)}
+		
+		}
 
 
 ### StateFlow:
