@@ -12,6 +12,146 @@
 
 
 
+#### **i)Fetching Network Data:**
+
+---> Traditionally network calls involved callback, leading to nested code and potential memory leaks. Flow offer a cleaner approach
+
+                  fun fetchData(): Flow<Data>
+                {
+                   return flow{
+                     Val response = RetrofitInstance.api.getData()
+                
+                   if(response.isSuccessful)
+                {
+                   emit(response.body()!!)
+                }  else
+                {
+                    Throw Exception(“Network Error”)
+                }   
+                   }
+                
+                }
+
+#### **ii) User input with Debounce:**
+
+---> Immediate network requests on every keystroke can overload the server. Use Debounce to delay emissions until a set time has passed since the last character.
+
+                fun searchUser(query: String): Flow<String>
+                {
+                   return flow{
+                 	emit(query)
+                   }.debounce(500)
+                     .filter{it.isNotEmpty()}
+                }  
+
+#### iii) Combining Multiple Data Sources
+
+---> You might need data from local storage and a network call to display a user profile. Use combine to merge emission form multiple flows.  
+
+                fun getUserDetails(): Flow<UserProfile>
+                {
+                    val localFlow = flow {
+                	emit(getUserFromLocal())
+                  }
+                  val networkFlow = fetchData().map{ it. toUserProfile()}
+                  return combine(localFlow, networkFlow) {localUser, networkUser ->
+                	networkUser ?: localUser  // Prioritise network data , fallback to local
+                 }
+                }
+
+iv) Long-Running Operations with Progress Updates:
+
+ Update the UI with progress during long-running tasks. Use flowOf and emit to periodically send progress updates.  fun downloadFile(): Flow<Int>
+{
+   return flow{
+	for(I in 0..100){
+		delay(100) 		emit(i)
+	}
+  }
+}
+
+v) Error-Handling and Cancellation:
+
+ Flows allow for proper error handling and cancellation using catch and onEach. Error Mgmt using catch and Cancellation use onEach.    fun getUsers(): Flow<List<User>>
+{
+    return flow {
+	val response = RetrofitInstance.api.getData()
+        if(response.isSuccessful){
+		emit(response.body()!!)
+	} else{
+		throw Exception(“Failed to fetch users”)
+	}
+ } .catch {emit (emptyList())}
+
+}
+
+vi) Event Handling with SharedFlow
+
+Centralized Events: Manage events like button clicks or network state changes in a single source.
+
+  private val _networkState = MutableSharedFlow<NetworkState>()
+  val networkState : SharedFlow<NetworkState> = _networkState.asSharedFlow()
+
+  fun onNetworkChange(state: NetworkState)
+  {
+	_networkState.tryEmit(state)
+  } 
+
+
+vii) Caching Data with Flow Caching Strategies:
+
+  Offline-First Approach: Improve user experience by displaying cached data while fetching fresh updates.    Flow Caching Power: Utilise operators like cache and conflateLatest for data caching. 
+
+   fun getPosts(): Flow<List<Post>>{
+	return flow{
+		val cachedPosts = getPostsFromLocal()
+		if(cachedPosts.isNotEmpty()){
+			emit(cachedPosts)
+		}
+		val networkPosts = fetchData().map{ it.toPostList()}
+		emitAll(networkPosts)
+	}
+	.cache() //Cache the entire flow for subsequent collection
+	.conflateLatest() // Only emit the latest network data if multiple emissions occur
+ }
+
+viii) Testing Asynchronous Code with Flow Test Operators:
+
+ Use operators like test and flowOf to create mock flows for unit testing
+
+   @RunWith(AndroidJUnit4::class)
+   Class MyViewModelTest
+  {
+	@Test
+	fun `fetchUser emits data successfully`()
+{
+	val mockFlow = flowOf(listOf(User(“John Doe”)))
+        val viewModel = MyViewModel(FakeRepository(mockFlow))
+	viewModel.users.test{
+		val values = awaitValue()
+		assertThat(values, contains(User(“John Doe”)))
+                finish()
+	}
+}
+	
+ }
+
+ix) Streamlining Long-Running Operations with Flow Operators:
+ 
+Manage multi-step operations with intermediate processing and error handling. Utilise operators like flatMapConcat, zip, and transform for complex flow manipulation.    fun downloadAndProcessFile(url: String) : Flow<String>
+{
+    return flow {
+		val downloadedFile = downloadFile(url)
+		val processedData = downloadedFile
+							.flatMapConcat { bytes -> processBytes(bytes)} 
+							.zipWith(getAdditionalData()) {data, additional -> combineData(data, additional)}
+							.transform {it.toUpperCase()}
+				emit(processedData)
+	}.catch {emitException(it)}
+
+}
+
+
 ### StateFlow:
 
 ---> Stateflow takes an initial value through constructor and emits it immediately when someone starts collecting. Stateflow is identical to LiveData. LiveData automatically unregisters the consumer when the view goes to the STOPPED state. When collecting a StateFlow this is not handled automatically , you can use repeatOnLifeCyCle scope if you want to unregister the consumer on STOPPED state. If you want current state use stateflow(.value).
