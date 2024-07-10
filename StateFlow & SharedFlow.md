@@ -281,3 +281,19 @@ Example:
 			extraBufferCapacity = 8 // Extra buffer capacity to avoid backpressure
  			)
 	
+
+#### Use Combine operators:
+
+Example:
+
+	val flow1 = MutableStateFlow(1)
+ 	val flow2 = MutableStateFlow(2)
+
+        val combinedFlow = flow1.combine(flow2) {value1, value2 ->
+		value1 + value2
+ 	}
+  	launch{
+   	  combinedFlow.collect{sum ->
+		println("$sum")
+      	  }
+	}
