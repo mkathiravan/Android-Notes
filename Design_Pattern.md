@@ -298,7 +298,59 @@ The above program explaination
             }
         }
 
-### What is abstract factory desing pattern and example?
+### What is Factory Design pattern and example?  
+
+ ---> It is a creational pattern that provides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created that will be created. Here's how you can implement the Factory Design Pattern in kotlin using SMS and Email notifications as examples.
+
+         interface Notification
+           {
+              fun notifyUser()
+           }
+           class SMSNotification: Notification
+           {
+            override fun notifyUser()
+            {
+              println("Sending an SMS notification")
+            }
+           }
+           class EmailNotificaion: Notification
+           {
+             override fun notifyUser()
+             {
+               println("Sending an Email Notification")
+             }
+           }
+           class NotificationFactory
+           {
+             fun createNotification(type: String): Notification?
+             {
+                return when(type){
+                 "SMS" -> SMSNotification()
+                 "Email" -> EmailNotificaion()
+                  else -> null
+                }
+             }
+           }
+           fun main()
+           {
+             val factory = NotificationFactory()
+             val smsNotification = factory.createNotification("SMS")
+             smsNotification?.notifyUser()
+
+             val emailNotification = factory.createNotification("Email")
+             emailNotification?.notifyUser()
+
+             val invalidNotification = factory.createNotification("Push")
+             invalidNotification?.notifyUser() ?: println("Invalid notification type")
+           }
+
+If you run the above program and the output like as below
+
+       Sending an SMS notification
+       Sending an Email Notification
+       Invalid notification type
+           
+### What is abstract factory design pattern and example?
 
 --> The Abstract Factory pattern is a creational design pattern that provides an interface for creating families of related or dependent objects without specifying their concrete classes. It involves multiple factory mehtods within a single factory interface, where each factory method is responsible for creating differnt types of objects.
 
