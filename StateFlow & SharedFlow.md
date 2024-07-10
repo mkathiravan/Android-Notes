@@ -246,3 +246,38 @@ If you run the above program and the output would like as below
 ---> For LiveData even if you give an initial value, you still need to do Null Check when you access its value (see this), it's kind of annoying. But that's not gonna happen on StateFlow - it will be what it should be.
 
 ---> For LiveData you cannot easily, or elegantly observe data changes JUST inside ViewModel, you are gona use observeForever() which is also mentioned in here.
+
+##### Encapsulate Mutable Flow
+
+Example:   
+
+	class ExampleViewModel
+ 	{
+	  private val _mutableSharedFlow = MutableSharedFlow<Int>()
+   	  val sharedFlow = _mutableSharedFlow.asSharedFlow()
+
+      	  private val _mutableStateFlow = MutableStateFlow(0)
+	  val stateFlow = _mutableStateFlow.asStateFlow()
+  	}
+
+##### Properly Manage Resources
+
+Example: 
+
+ 	val scope = CoroutineScope(Dispatchers.Main)
+  	val sharedFlow = MutableSharedFlow<Int> ()
+   	val job = scope.launch{
+    		sharedFlow.collect{value->
+      		    println("Received: $value")	
+		}
+	}
+	job.cancel()  // Later when the collector is no longer needed
+
+#### Use buffer & repay configuration:
+
+Example:
+
+	val sharedFlow = MutableSharedFlow<Int> ( replay = 2 //replay the last 2 values
+			extraBufferCapacity = 8 // Extra buffer capacity to avoid backpressure
+ 			)
+	
