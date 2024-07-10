@@ -297,3 +297,111 @@ The above program explaination
                 }
             }
         }
+
+### What is abstract factory desing pattern and example?
+
+--> The Abstract Factory pattern is a creational design pattern that provides an interface for creating families of related or dependent objects without specifying their concrete classes. It involves multiple factory mehtods within a single factory interface, where each factory method is responsible for creating differnt types of objects.
+
+            public interface Button
+           	{
+           		void render();
+           	}
+           
+            	public interface TextField
+           	{
+           		void render();
+           	}
+           
+                   public class AndroidButton implements Button
+           	{
+           		@Override
+           		public void render(){
+           			System.out.println(“Rendering Android Button”)
+           		}
+           	}
+           
+            	 public class AndroidTextField implements TextField
+           	{
+           		@Override
+           		public void render(){
+           			System.out.println(“Rendering Android TextField”)
+           		}
+           	}
+           
+           	public class IOSButton implements Button
+           	{
+           		@Override
+           		public void render()
+           		{
+                  			System.out.println(“Rendering IOS Button”)
+           		}
+           	}
+           
+           	public class IOSTextField implements TextField
+           	{
+           		@Override
+           		public void render(){
+           			System.out.println(“Rendering IOS TextField”)
+           		}
+           	}
+           
+           	public interface GUIFactory
+           	{
+           		Button createButton();
+           		TextField createTextField();
+           	}
+           
+           
+           	public class AndroidFactory implements GUIFactory
+           	{
+           		@Override
+           		public Button createButton(){
+           				return new AndroidButton();
+           			}
+           
+                         @Override
+           		public TextField createTextField(){
+           			return new AndroidTextField();
+           		}
+           	}
+           
+           	public class IOSFactory implements CUIFactory
+           	{
+           		@Override
+           		public Button createButton(){
+           				return new IOSButton();
+           			}
+           
+                         @Override
+           		public TextField createTextField(){
+           			return new IOSTextField();
+           		}
+           	}
+           
+            	public class Client
+           	{
+           		private Button button;
+           		private TextField textField;
+           		public Client(GUIFacotry factory)
+           		{
+           			button = factory.createButton()	
+           			textfield = factory.createTextField()
+           		}
+           		public void renderUI
+           		{
+           			button.render()
+           			textfield.render();
+           		}
+           
+                  		public static void main(String[] args)
+           		{
+           			GUIFactory androidFactory = new AndroidFactory();
+           			Client androidClient = new Client(androidFactory);
+           			androidClient.renderUI();
+           
+           			GUIFactory iosFactory = new IOSFactory();
+           			Client iosClient = new Client(iosFactory);
+           			iosClient.renderUI();
+           		}
+           
+           	}
