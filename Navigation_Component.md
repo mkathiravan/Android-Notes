@@ -46,3 +46,25 @@ Receive:
           mobileNo = arguments !!.getString("mobile").toString()
           password = arguments !!.getString("password").toString()
         }
+
+
+### How to change start destination of navigation graph programmatically?
+
+**Type1**: Using NavOptions:
+
+                NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.FirstFragment, true).build()
+                Navigation.findNavController(view).navigate(R.id.action_fragment, bundle, navOptions)
+
+**Type2**: Alternative way:
+
+                findNavController(fragment).navigate(FirstFragmentDirections.actionFirstFragmentToSecondFragment)
+
+
+ ### How to go back to previous fragments?
+
+  --> findNavController().popBackStack()
+
+  If you are setting safe-args library in gradle file then the following fragmentDirection class automatically generated.
+
+             val action = FirstFragmentDirections.actionFirstFragmentToSecondFragment(yourData)
+             navController.navigate(action)
