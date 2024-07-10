@@ -457,3 +457,10 @@ If you run the above program and the output like as below
            		}
            
            	}
+
+
+### Composite Design Pattern:
+
+---> It is used where we need to treat a group of objects in similar way as a single object. It is a tree structure to represent part as well as whole hierarchy. This pattern creates a class that contains group of its own objects. This class provides ways to modify its group of same objects.
+
+   Example: View & ViewGroup
