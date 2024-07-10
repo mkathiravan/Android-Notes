@@ -90,3 +90,65 @@
           weatherStation.registerObserver(display2)
           weatherStation.setTemperature(25.0)
         }
+
+
+#### Create Adapter Desing Pattern in Kotlin
+
+      interface MediaPlayer
+      {
+        fun play(audioType: String, fileName: String)
+      }
+      interface AdvancedMediaPlayer
+      {
+        fun playVlc(fileName: String)
+        fun playMp4(fileName: String)
+      }
+      class VlcPlayer: AdvancedMediaPlayer
+      {
+        override fun playVlc(fileName: String)
+        {
+            println("Playing vlcFile : $fileName")
+        }
+        override fun playMp4(fileName: String)
+        {
+            println("Playing Mp4File: $fileName")
+        }
+      }
+      class Mp4Player: AdvancedMediaPlayer
+      {
+        override fun playVlc(fileName: String)
+        {
+            println("Playing vlcFile : $fileName")
+        }
+        override fun playMp4(fileName: String)
+        {
+            println("Playing Mp4File: $fileName")
+        }
+      }
+      class MediaPlayer(private val audioType: String): MediaPlayer
+      {
+        private lateinit var advancedMusicPlayer: AdvancedMediaPlayer
+        init{
+            when(audioType)
+            {
+                "vlc" -> advancedMusicPlayer = VlcPlayer()
+                "mp4" -> advancedMusicPlayer = Mp4Player()
+            }
+        }
+        override fun play(audioType: String, fileName: String)
+        {
+            when(audioType)
+            {
+               "vlc" ->  advancedMusicPlayer.playVlc(fileName)
+               "mp4" ->  advancedMusicPlayer.playMp4(fileName)
+               else -> println("Invalid Media")
+            }
+        }
+      }
+      fun main()
+      {
+        val audioPlayer = MediaPlayer()
+        audioPlayer.play("vlc","movie.vlc")
+        audioPlayer.play("mp4","movie.mp4")
+        audioPlayer.play("avi","remote.avi")
+      }
