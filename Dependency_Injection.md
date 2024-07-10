@@ -190,6 +190,67 @@ Example:
 
  --> This scope ensures that the same instance of a dependency is used within a single activity. A new instance is created for each new activity.
 
+ a) Create a UserPreferences class
+
+       class UserPreferences @Inject constructor()
+       {
+         private val preferences = mutableMapOf<String, String> ()
+         fun setPreference(key: String, value: String)
+         {
+           preferences[key] = value
+         }
+         fun getPreference(key: String) : String?{
+           return preferences[key]
+         }
+       }
+
+  b) Create Hilt Module
+
+       @Module
+       @InstallIn(ActivityComponent::class)
+       object UserPreferenesModule{
+         @Provides
+         @ActivityScoped
+         fun provideUserPreferences(): UserPreferences
+         {
+           return UserPreferences()
+         }
+       }
+
+  c) Injecting into an Activity
+
+       @AndroidEntryPoint
+       class SettingsActivity: AppCompatActivity()
+       {
+         @Inject
+         lateinit var userPreferences: UserPreferences
+         override fun onCreate(savedInstanceState: Bundle?)
+         {
+           super.onCreate(savedInstanceState)
+           setContentView(R.layout.activity_settings)
+           userPreferences.setPreference("theme","dark")
+
+           val theme = userPreferences.getPreference("theme")
+           println("Selected theme $theme")
+         }
+       }
+
+   d) Injecting into a Fragment
+
+       @AndroidEntryPoint
+       class SettingFragment: Fragment(R.layout.fragment_settings)
+       {
+         @Inject
+         lateinit var userPreferences: UserPreferences
+
+         override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+             super.onViewCreated(view, savedInstanceState)
+
+             userPreferences.setPreference("notifications","enabled")
+             val notifications = userPreferences.getPreference("notifications")
+             println("Notifications preference: $notifications")
+         }
+       }
 **iv)@FragmentScoped**:
 
  --> This scope provides a single instance of a dependency for a specific fragment. A new instance is created for each new fragment instance.
