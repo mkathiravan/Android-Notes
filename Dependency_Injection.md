@@ -255,6 +255,101 @@ Example:
 
  --> This scope provides a single instance of a dependency for a specific fragment. A new instance is created for each new fragment instance.
 
+ a) Create a FragmentLogger class
+
+       class FragmentLogger @Inject constructor()
+       {
+         private val logs = mutableListOf<String>()
+         fun log(message: String)
+         {
+           logs.add(message)
+         }
+         fun getLogs(): List<String>
+         {
+           return logs
+         }
+       }
+
+  b) Create a Module to provide the FragmentLogger Dependency
+
+        @Module
+        @InstallIn(FragmentComponent::class)
+        object FragmentLoggerModule
+        {
+          @Provides
+          @FragmentScoped
+          fun providesFragmentLogger(): FragmentLogger
+          {
+            return FragmentLogger()
+          }
+        }
+
+  c) you can inject FragmentLogger into any class that Hilt can inject into within the fragment scope
+
+       @AndroidEntryPoint
+       class MainFragment: Fragment(R.layout.fragment_main)
+       {
+         @Inject
+         lateinit var fragmentLogger: FragmentLogger
+         override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+         {
+           super.onViewCreated(view, savedInstanceState)
+           fragmentLogger.log("fragment Created")
+
+           //Observe or use the logs
+           var logs = fragmentLogger.getLogs()
+           println("Logs: $logs")
+         }
+       }
+
+   ##### Example with Activity and Multiple Fragments
+
+        @AndroidEntryPoint
+        class MainActivity: AppCompatActivity()
+        {
+           override fun onCreate(savedInstanceState: Bundle?){
+             super.onCreate(savedInstanceState)
+             setContentView(R.layout.activity_main)
+             if(savedInstanceState == null)
+             {
+               supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FirstFragment()).commit()
+             }
+           }
+        }
+
+       @AndroidEntryPoint
+       class FirstFragment : Fragment(R.layout.fragment_first)
+       {
+         @Inject
+         lateinit var fragmentLogger: FragmentLogger
+         override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+         {
+            super.onViewCreated(view, savedInstanceState)
+            fragmentLogger.log("First Fragment Created")
+
+            //Navigate to Second Fragment
+            view.findViewById<Button>(R.id.button_next).setOnClickListener{
+               parentFragmentManager.beginTransaction().replace(R.id.fragment_container, SecondFragment()).addToBackStack(null).commit()
+            }
+         }
+       }
+
+       @AndroidEntryPoint
+       class SecondFragment : Fragment(R.layout.fragment_first)
+       {
+         @Inject
+         lateinit var fragmentLogger: FragmentLogger
+         override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+         {
+            super.onViewCreated(view, savedInstanceState)
+            fragmentLogger.log("Second Fragment Created")
+
+            // Observer or use the logs
+            val logs = fragmentLogger().getLogs()
+            println("Second Fragment Logs: $logs")
+         }
+       }
+
 **v)@ViewScoped**:
 
  --> This scope provides a single instance of a dependency for a specific view.
