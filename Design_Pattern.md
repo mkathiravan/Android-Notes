@@ -31,4 +31,62 @@
 
   ---->  How object interact and communicate each other.
 
-   Chain of Responsibility Pattern, Command Pattern, Interpreter Pattern, Iterator Pattern, Mediator Pattern, Memento Pattern, Observer Pattern, State Pattern, Template Pattern, Visitor Pattern
+   Chain of Responsibility Pattern, Command Pattern, Interpreter Pattern, Iterator Pattern, Mediator Pattern, Memento Pattern, Observer Pattern, State Pattern, Template Pattern, Visitor Pattern.
+
+
+#### Create Observer Pattern in Kotlin
+
+        interface Observer
+        {
+            fun update(data: Any)
+        }
+        interface Subject
+        {
+            fun registerObserver(observer: Observer)
+            fun removeObserver(observer: Observer)
+            fun notifyObserver(data: Any)
+        }
+        class WeatherStation: Subject
+        {
+          private val observers = mutableListOf(observer())
+          private val temperature: Double = 0.0
+
+          fun setTemperature(temperature: Double)
+          {
+            this.temperature = temperature
+            notifyObserver(temperature)
+          }
+
+          override fun registerObserver(observer: Observer)
+          {
+            observers.add(observer)
+          }
+
+          override fun removeObserver(observer: Observer)
+          {
+            observers.remover(observer)
+          }
+
+          override fun notifyObserver(data: Any)
+          {
+            observers.forEach { it.update(data) }
+          }
+        }
+
+        class Display: Observer
+        {
+            override fun update(data: Any)
+            {
+              println("data")
+            }
+        }
+
+        fun main()
+        {
+          val weatherStation = WeatherStation()
+          val display1 = Display()
+          val display2 = Display()
+          weatherStation.registerObserver(display1)
+          weatherStation.registerObserver(display2)
+          weatherStation.setTemperature(25.0)
+        }
