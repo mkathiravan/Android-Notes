@@ -63,3 +63,76 @@ To solve the problem quailifier annotation you use to identify a specific bindin
 --> In Hilt, a dependency injection library for Android, Scopes are used to define the lifecycle and visibility of dependencies. They help manage how long an instance of a dependency should live and ensure that the same instance is provided within a defined scope. Here are common Hilt scopes:
 
   **i)@Singleton**: 
+
+ --> This scopes ensures that a single instance of the dependency is created and shared throughout the entire application. The instance lives as long as the application is running.
+
+Example:
+
+  a) Create a class that you want to be singleton-scoped.
+
+          class NetworkClient @Inject constructor()
+          {
+            fun doNetworkCall()
+          }
+
+  b) Create a Hilt Module to provide the NetworkClient dependency
+
+         @Module
+         @InstallIn(SingletonComponent::class)
+         object NetworkModule
+         {
+           @Provides
+           @Singleton
+           fun provideNetworkClient(): NetworkClient{
+              return NetworkClient()
+           }
+         }
+
+  c) Use the Singleton-Scoped Dependency: Now, you can inject NetworkClient into any class that Hilt can inject into, such as as Activity or ViewModel
+
+         @AndroidEntryPoint
+         class MainActivity : AppCompatAcitivty()
+         {
+           @Inject
+           lateinit var networkClient: NetworkClient
+
+            override fun onCreate(savedInstanceState: Bundle?)
+            {
+              super.onCreate(savedInstanceState)
+              setContentView(R.layout.activity_main)
+              networkClient.doNetworkCall()
+            }
+         }
+
+  d) Injecting into a ViewModle
+
+        @HiltViewModel
+        class MainViewModel @Inject constructor(private val networkClient: NetworkClient): ViewModel()
+        {
+          fun makeNetworkCall()
+          {
+            netowrkClient.doNetworkCall()
+          }
+        }
+
+        
+  **ii)@ActivityRetainedScope**:
+
+  --> This scope is used for dependencies that need to live as long as an activity and its configuration changes(such as screen rotations). The instance is retained across configuration changes but is destroyed when the activity is finished.
+
+**iii)@ActivityScoped**: 
+
+ --> This scope ensures that the same instance of a dependency is used within a single activity. A new instance is created for each new activity.
+
+**iv)@FragmentScoped**:
+
+ --> This scope provides a single instance of a dependency for a specific fragment. A new instance is created for each new fragment instance.
+
+**v)@ViewScoped**:
+
+ --> This scope provides a single instance of a dependency for a specific view.
+
+ **vi)@ViewModelScoped**:
+
+ --> This scope is used to create dependencies that live as long as a ViewModel. It ensures the same instance is shared within the viewModel's lifecycle.
+
