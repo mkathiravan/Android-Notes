@@ -120,6 +120,72 @@ Example:
 
   --> This scope is used for dependencies that need to live as long as an activity and its configuration changes(such as screen rotations). The instance is retained across configuration changes but is destroyed when the activity is finished.
 
+  Example:
+
+  a) Create User Repository class
+
+          class UserRepository @Inject constructor()
+          {
+             private val users = mutableListOf<String>()
+             fun addUser(user: String)
+             {
+               users.add(user)
+             }
+             fun getUsers(): List<String>
+             {
+               return users
+             }
+          }
+
+  b) Create a module to provide the UserRepository dependency
+
+           @Module
+           @InstallIn(ActivityRetainedComponent::class)
+           object UserRepositoryModule
+           {
+              @Provides
+              @ActivityRetainedScoped
+              fun provideUserRepository(): UserRepository
+              {
+                retrun UserRepository()
+              }
+           }
+
+  c) You can inject UserRepository into any class that Hilt can inject into within the activity scope, such as ViewModel
+
+           @HiltViewModel
+           class UserViewModel @Inject constructor(private val userRepository: UserRepository): ViewModel()
+           {
+              fun addUser(user: String) {
+                userRepository.addUser(user)
+              }
+              fun getUsers():List<String>
+              {
+                return userRepository.getUsers()
+              }
+           }
+
+  d) Injecting into an Activity
+
+           @AndroidEntryPoint
+           class UserActivity: AppCompatActivity()
+           {
+             private val viewModel: UserViewModel by viewModels()
+             override fun onCreate(savedInstanceState: Bundle?)
+             {
+              super.onCreate(savedInstanceState)
+              setContentView(R.layout.activity_user)
+              viewModel.addUser("Kathirava")
+              val users = viewModel.getUsers()
+              println("Users: $users")
+             }
+           }
+
+  e) Initialize Hilt in your applicaton class
+
+         @HiltAndroidApp
+         class MyApplication : Application()
+         
 **iii)@ActivityScoped**: 
 
  --> This scope ensures that the same instance of a dependency is used within a single activity. A new instance is created for each new activity.
