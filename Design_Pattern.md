@@ -300,7 +300,7 @@ The above program explaination
 
 ### What is Factory Design pattern and example?  
 
- ---> It is a creational pattern that provides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created that will be created. Here's how you can implement the Factory Design Pattern in kotlin using SMS and Email notifications as examples.
+ ---> It is a creational pattern that provides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created that will be created. Here's how you can implement the Factory Design Pattern in kotlin using SMS and Email notifications as examples
 
          interface Notification
            {
