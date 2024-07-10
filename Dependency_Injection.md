@@ -56,3 +56,10 @@ To solve the problem quailifier annotation you use to identify a specific bindin
      @LibraryKey
      @Inject
      lateinit var libraryKey: String
+
+
+### What is the use of Scope in Hilt dependency injection?
+
+--> In Hilt, a dependency injection library for Android, Scopes are used to define the lifecycle and visibility of dependencies. They help manage how long an instance of a dependency should live and ensure that the same instance is provided within a defined scope. Here are common Hilt scopes:
+
+  **i)@Singleton**: 
