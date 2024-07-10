@@ -193,6 +193,13 @@ The above program explaination
 
 **2.AdvancedMediaPlayer Interface**: Defines more specific methods for playing VLC and MP4 Files.
 
-3.VlcPlayer
+3.**VlcPlayer and Mp4Player Classes**: Implement the AdvancedMediaPlayer interface for playing VLC and MP4 files respectively.
+
+**4.MediaAdapter class:**: Implements the MediaPlayer interface and uses an instance of AdvancedMediaPlayer to play VLC and MP4 files.
+
+**AudioPlayer class**: Implements the MediaPlayer interface and uses the MediaAdapter to play different types of media files.
+
+**Main Function:**: Tests the functionality by creating an AudioPlayer instance and calling the play method with different media types.
+
     
             
