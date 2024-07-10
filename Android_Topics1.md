@@ -69,3 +69,60 @@
                 println(sumWithReduce)
 
                 //output: 15
+
+
+### Difference between viewBinding and dataBinding?
+
+**ViewBinding**: 
+
+   **a)Type-Safe Binding**:
+
+ --> ViewBinding generates a binding class for each XML layout file. This class contains direct references to all the views with an ID in the layout.
+
+ ---> This eliminates the need for findViewById calls, reducing boilerplate code.
+
+  **b)Simplicity:**
+
+  ---> ViewBinding is simpler to set up and use compared to DataBinding.
+
+  ---> There is no need to use any special syntax in the XML layout files.
+
+  **c)Performance**:
+
+  ---> ViewBinding is generally faster than DataBinding since it does not involve any overhead associated with data binding expression or lifecycle management.
+
+  **d)No Binding Expressions**:
+
+---> ViewBinding does not support binding expression in XML. It only provides direct view references.
+
+   **e)No Automatic Updates**:
+
+---> Changes in data are not automatically reflected in the UI. You need to manually update the UI components.
+
+**Data Binding**  
+
+**a)Binding Expressions** :
+
+--> DataBinding allows the use of binding expression within XML layout files. This means you can bind UI components directly to data model properties.
+
+ **b)Two-way Data Binding** :
+
+--> DataBinding supports two-way data binding, meaning changes in the UI can update the data model and vice versa automatically.
+
+  **c)LifyCycle Awareness**:
+
+--> DataBinding is lifecycle-aware meaning it can observe LiveData and automatically update the UI when the data changes.
+
+  **d)Require More Setup**:
+
+--> DataBinding requires enabling the data binding feature in the build.gradle file and setting up binding expressions in XML layout files.
+
+ **e)Additional Features**:
+
+--> DataBinding supports various advanced features like custom binding adapters, which allows you to define how a property is set on view.
+
+**When to Use Each**
+
+ **i)ViewBinding**: When you need simplicity and better performance. When you do not need binding expressions or automatic updates from data changes.
+
+ **ii)DataBinding**: When you need powerful features like binding expressions, two-way data binding, and lifecycle awareness. When you want to minimize boilerplate code for updating UI components bases on data model changes.
