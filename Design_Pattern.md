@@ -4,8 +4,74 @@
 
 **i) Singleton Pattern:**
 
-    --> Only one instance and provides a global point of access to that instance.
+--> Only one instance and provides a global point of access to that instance. 2 points fo singelton desing pattern.
 
+  **a)Early Instantiation:**
+
+---> This approach ensures that the instance is created at the time of class loading, which is referred to as early instantiation.
+       
+
+Example:
+
+         object Singleton
+         {
+            init{
+              println("Singleton instance is created")
+            }
+            fun doSomething()
+            {
+             println("Singleton method is called")
+            }
+         }
+         fun main()
+         {
+             // Accessing the Singleton instance
+             Singleton.doSomething()
+             Singleton.doSomething()
+         }
+
+   **b)Lazy Instantiation:**
+
+---> Lazy instantiation means that the instance of the Singleton is created only when it is first accessed, rather than at the time of class loading.
+
+Example:
+
+        class Singleton private constructor()
+        {
+            init{
+                println("Singleton instance is created")
+            }
+            companion object
+            {
+              @Volatile
+              private var instance: Singleton? = null
+              fun getInstance(): Singleton
+              {
+                  return instance ?: synchronized(this)
+                  {
+                    instance ?: Singleton().also {instance = it}
+                  }
+              }
+            }
+            fun doSomething()
+            {
+                println("Singleton method is called")
+            }
+        }
+
+         fun main()
+         {
+            val singleton1 = Singleton.getInstance().doSomething()
+            val singleton2 = Singleton.getInstance().doSomething()
+            println("Are both instances the same? ${singleton1 == singleton2}")
+         }
+
+If you run the above program the output look like as below
+
+            Singleton instance is created
+            Singleton method is called
+            Singleton method is called
+            Are both instances the same? true
 **ii)Factory Pattern:**
 
   ---> Defines an interface for creating objects but allows subclass to alter the type of object that will be created.
@@ -15,6 +81,10 @@
   ---> Provides an interface for creating families of related or dependent object without specifying their concrete classes.
 
  **iv)Builder Pattern:**
+
+  ---> It builds a complex object using simple objects and using a step by step approach. This type of design pattern comes under creational pattern and one of the best way to create an object.
+
+    Example: Alert Dialog, Notification
 
  **v)Prototype Pattern:**
 
@@ -33,6 +103,12 @@
 
    Chain of Responsibility Pattern, Command Pattern, Interpreter Pattern, Iterator Pattern, Mediator Pattern, Memento Pattern, Observer Pattern, State Pattern, Template Pattern, Visitor Pattern.
 
+
+### Observer Design Pattern:
+
+ --> It is useful when you are interested in the state of an object and want to get notified whenever there is any change.
+
+  Example: BroadcastReceiver, RxJava, LiveData
 
 #### Create Observer Pattern in Kotlin
 
