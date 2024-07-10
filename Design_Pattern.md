@@ -202,4 +202,22 @@ The above program explaination
 **Main Function:**: Tests the functionality by creating an AudioPlayer instance and calling the play method with different media types.
 
     
-            
+### How to make Singleton Pattern Thread Safe?
+
+ ---> Making the singleton pattern thread safe is essential to ensure that multiple threads do not create separate instances of the singleton class. Here's one way to implement a thread safe singleton pattern in kotlin using lazy initialization with double-checked locking.
+
+        class Singleton private constructor()
+        {
+            companion object
+            {
+                @Volatile
+                private var instance: Singleton? = null
+                fun getInstance(): Singleton
+                {
+                    return instance ?: synchronized(this)
+                    {
+                        instance ?: Singleton().also {instance = it} 
+                    }
+                }
+            }
+        }
