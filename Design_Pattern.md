@@ -94,15 +94,18 @@
 
 #### Create Adapter Desing Pattern in Kotlin
 
+      //MediaPlayer interface
       interface MediaPlayer
       {
         fun play(audioType: String, fileName: String)
       }
+      //AdvancedMediaPlayer interface
       interface AdvancedMediaPlayer
       {
         fun playVlc(fileName: String)
         fun playMp4(fileName: String)
       }
+      //VlcPlayer class implementing AdvancedMediaPlayer
       class VlcPlayer: AdvancedMediaPlayer
       {
         override fun playVlc(fileName: String)
@@ -111,30 +114,33 @@
         }
         override fun playMp4(fileName: String)
         {
-            println("Playing Mp4File: $fileName")
+            println("Do Nothing")
         }
       }
+      //Mp4Player class implementing AdvancedMediaPlayer
       class Mp4Player: AdvancedMediaPlayer
       {
         override fun playVlc(fileName: String)
         {
-            println("Playing vlcFile : $fileName")
+            println("Do nothing")
         }
         override fun playMp4(fileName: String)
         {
             println("Playing Mp4File: $fileName")
         }
       }
-      class MediaPlayer(private val audioType: String): MediaPlayer
+      // Adapter class implementing MediaPlayer
+      class MediaAdapter(private val audioType: String): MediaPlayer
       {
-        private lateinit var advancedMusicPlayer: AdvancedMediaPlayer
-        init{
+        private val advancedMusicPlayer: AdvancedMediaPlayer = 
+        
             when(audioType)
             {
-                "vlc" -> advancedMusicPlayer = VlcPlayer()
-                "mp4" -> advancedMusicPlayer = Mp4Player()
-            }
-        }
+                "vlc" -> VlcPlayer()
+                "mp4" -> Mp4Player()
+                else -> throw IllegalArgumentException("Invalid media type: $audioType")
+            
+           }
         override fun play(audioType: String, fileName: String)
         {
             when(audioType)
@@ -145,10 +151,48 @@
             }
         }
       }
+      
+      //AudioPlayer class implementing MediaPlayer
+      class AudioPlayer : MediaPlayer{
+          private var mediaAdapter: MediaAdapter? = null
+          
+          override fun play(audioType: String, fileName: String)
+          {
+              when(audioType){
+                  "mp3" -> println("Playing mp3 file: $fileName")
+                  "vlc","mp4" -> {
+                      mediaAdapter = MediaAdapter(audioType)
+                      mediaAdapter!!.play(audioType, fileName)
+                  }
+                  else ->
+                  println("Invalid media type: $audioType. Only mp3, vlc, and mp4 are supported")
+              }
+          }
+      }
       fun main()
       {
-        val audioPlayer = MediaPlayer()
+        val audioPlayer = AudioPlayer()
+        audioPlayer.play("mp3","song.mp3")
+
         audioPlayer.play("vlc","movie.vlc")
         audioPlayer.play("mp4","movie.mp4")
         audioPlayer.play("avi","remote.avi")
       }
+
+
+---> If you run the above program and the output as
+
+            Playing mp3 file: song.mp3
+            Playing vlcFile : movie.vlc
+            Playing Mp4File: movie.mp4
+            Invalid media type: avi. Only mp3, vlc, and mp4 are supported
+
+The above program explaination
+
+**1.MediaPlayer Interface**: Defines the standard play method.
+
+**2.AdvancedMediaPlayer Interface**: Defines more specific methods for playing VLC and MP4 Files.
+
+3.VlcPlayer
+    
+            
