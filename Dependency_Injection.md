@@ -7,6 +7,19 @@
     Provides
     Inject
 
+--> To understand it better in a basic way, think module as a provider of dependency and consider an activity or any other class as a consumer. Now to provide dependency from provider to consumer we have a bridge between them, in Dagger, Component work as that specific bridge.
+
+---> Now, a module is a class and we annotate it with @Module for Dagger to understand it as Module.
+
+---> A component is an interface, which is annotated with @Component and takes modules in it. (But now, this annotation is not required in Dagger-Hilt)
+
+--> Provides are annotation which is used in Module class to provide dependency and,
+
+--> Inject is an annotation that is used to define a dependency inside the consumer.
+
+![image](https://github.com/mkathiravan/Android-Notes/assets/39657409/3fd76258-8ea2-42e3-a0fa-e198477f91ca)
+
+
 ### Qualifier
 
 ---> Consider an example where we have two functions returning String values. But while providing it via Dagger, how would dagger know which class needs which string values as they both are of the same type.
