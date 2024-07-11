@@ -354,6 +354,66 @@ Example:
 
  --> This scope provides a single instance of a dependency for a specific view.
 
+ a) Create a UserManager class
+
+         class UserManager @Inject constructor()
+         {
+           private val userName: String = "Guest"
+           fun setUserName(name: String)
+           {
+             userName = name
+           }
+           fun getUserName(): String
+           {
+             return userName
+           }
+         }
+
+  b) To provide the UserManager dependency
+
+       @Module
+       @InstallIn(ViewComponent::class)
+       object UserManagerModule{
+
+          @Provides
+          @ViewScoped
+          fun provideUserManager(): UserManager
+          {
+              return UserManager()
+          }
+       }
+
+  c) you can inject UserManager into a custom view class
+
+         @AndroidEntryPoint
+         class UserProfileView @JvmOverloads constructor(
+         context: Context, attrs: ArributeSet? = null, defStyleAttr: Int = 0): LinearLayout(context, attrs, defStyleAttr)
+         {
+            @Inject
+            lateinit var userManager: UserManager
+
+            init{
+               inflate(context, R.layout.view_user_profile, this)
+            }
+
+           userManager.setUserName("Kathir")
+           val userNameTextView: TextView = findViewById(R.id.user_name_text_view)
+           userNameTextView.text = userManager.getUserName()
+         }
+
+         override fun onAttachedToWindow()
+         {
+           super.onAttachedToWindow()
+           println("UserProfileView attached with user: ${userManager.getUserName()}")
+         }
+
+         override fun onDetachedFromWindow()
+         {
+           super.onDetachedFromWindow()
+           println("UserProfileView detached")
+         }
+       
+
  **vi)@ViewModelScoped**:
 
  --> This scope is used to create dependencies that live as long as a ViewModel. It ensures the same instance is shared within the viewModel's lifecycle.
