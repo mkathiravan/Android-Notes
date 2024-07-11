@@ -418,3 +418,51 @@ Example:
 
  --> This scope is used to create dependencies that live as long as a ViewModel. It ensures the same instance is shared within the viewModel's lifecycle.
 
+  a) Create a Repository class
+
+         class Repository @Inject constructor()
+         {
+             private val data = mutableListOf<String>()
+             fun addData(item: String)
+             {
+               data.add(item)
+             }
+             fun getData(): List<String>
+             {
+                return data
+             }
+         }
+
+  b) you can inject Repository into a ViewModel
+
+       @HiltViewModel
+       class MainViewModel @Inject constructor(private val repository: Repository): ViewModel
+       {
+         fun addItem(item: String)
+         {
+            repository.addData(item)
+         }
+         fun getItems(): List<String>
+         {
+            return repository.getData()
+         }
+       }
+
+  c) Use the ViewModel in an Activity or Fragment
+
+        @AndroidEntryPoint
+        class MainActivity : AppCompatActivity()
+        {
+           private val viewModel: MainViewModel by viewModels()
+
+           override fun onCreate(savedInstanceState: Bundle?)
+           {
+             super.onCreate(savedInstanceState)
+             setContentView(R.layot.activity_main)
+
+             viewModel.addItem("Hello Hilt")
+
+             val data = viewModel.getItems()
+             println("Data :$data")
+           }
+        }
