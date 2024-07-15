@@ -46,3 +46,14 @@ Here's a conceptual approach:
                 customScope.cancelScope()
             }
         }
+   
+       fun main()
+       {
+          val customScope = CustomScope()
+          customScope.launch{
+             delay(1000)
+             println("Global coroutine completed")
+          }
+          val viewModel = ExampleViewModel()
+          customScope.cancelScope()
+       }
