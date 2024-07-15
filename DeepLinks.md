@@ -8,4 +8,42 @@ Here's an overview of how this verification works:
 
  **1.Define Intent Filters in the Manifest:**
 
-   -> In  your app's AndroidManifest.xml, you need to define intent filters for the activities that should handle the deep links. This includes specifying the schema, host and path patterns for the URL's your app can handle.
+ - In  your app's AndroidManifest.xml, you need to define intent filters for the activities that should handle the deep links. This includes specifying the schema, host and path patterns for the URL's your app can handle.
+
+            <activity android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter android:autoVerify="true">
+               <action  android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="https"
+                    android:host="www.example.com"
+                    android:pathPrefix="/path"/>
+            </intent-filter>
+            </activity>
+
+
+ **2.Setting up Asset Links JSON File:**
+
+    - The host website must host a Digital Asset Links file at https://<domain>/.well-known/assetlinks.json. This JSON file specifies which apps are allowed to handle URLs for that domain.
+
+            [
+               {
+                  "relation":
+                  ["delegate_permission/common.handle_all_urls"],
+                  "target":{
+                     "namespace": "android_app",
+                     "package_name": "com.example.app",
+
+                     "sha256_cert_fingerprints":[
+                        "AB:CD:EF:.....12:34"
+                     ]
+                  }
+               }
+            ]
+
+ **2.Verification by the System:**
+
+    - When a users attempts to open a URL, the Android system verifies the deep link by checking the assetLinks.json file on the specified host. It confirms that the URL's host matches the domains listed in the intent filters and that the app is authorized to handle these URLs as declated in the assetlinks.json file.
+
+    
