@@ -91,6 +91,6 @@ Here's an overview of how this verification works:
 
 ---> When a user clicks on a link to https://www.example.com, Android checks the assetlinks.json file at https://www.example.com/.well-known/assetlinks.json. It verifies that com.example.myapp is listed as a trusted handler of the URL. If the verification passes, the link opens in com.example.myapp automatically.
 
-    This process ensures that deep links are securely associated with your app, preventing unauthorized apps from intercepting and handling your app's intented URLs.
+ - This process ensures that deep links are securely associated with your app, preventing unauthorized apps from intercepting and handling your app's intented URLs.
 
     
