@@ -1,9 +1,9 @@
 ## Jetpack Compose
 #### key Features
-    i) Declarative UI: Instead of describing how to change the UI, you describe what the UI should look like for a give state.
-    ii) Kotlin-Based
-    iii) Composable funcitons
-    iv) State Management: Compose uses state to determine how UIs should render. When the state changes, the UI automatically updates to reflect those changes.
+ i) Declarative UI: Instead of describing how to change the UI, you describe what the UI should look like for a give state.
+ii) Kotlin-Based
+iii) Composable funcitons
+iv) State Management: Compose uses state to determine how UIs should render. When the state changes, the UI automatically updates to reflect those changes.
     V) Integration with Jetpack
     Vi) Unidirectional Data Flow: Data flows in one direction, from parent to child making the flow of data easier to follow and debug.
 
