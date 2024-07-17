@@ -98,6 +98,10 @@
           {
             println("Duck Swimming")
           }
+          override fun fly()
+          {
+            println("Duck Flying")
+          }
         }
         class Penguin: CanSwim
         {
@@ -106,6 +110,21 @@
             println("Penguin Swimming")
           }
         }
+        fun main()
+        {
+          val duck = Duck()
+          duck.swim()
+          duck.fly()
+
+          val penguin = Penguin()
+          penguin.swim()
+        }
+
+---> If you run the above program the output will be as below
+
+      Duck Swiming
+      Duck Flying
+      Penguin swiming
 
 #### Dependency Inversion Principle (DIP)
 
