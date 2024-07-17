@@ -71,3 +71,62 @@ Here's a detailed overview of the working flow of MockK, along with examples:
             assert(result == "Mocked Data")
           }
         }
+
+  #### Capturing Arguments
+
+        class Service{
+            fun saveData(data: String){
+              //save data
+            }
+        }
+        class ExampleTest{
+          @Test
+          fun testCaptureArguments()
+          {
+            // Creating a mock object
+            val mockService = mockk<Service>()
+
+            // Creating a slot to capture the arguments
+            val slot = slot<String>
+
+            // Stubbing the method
+            every {mockService.saveData(capture(slot))} just Runs
+
+            // Calling the method
+            mockService.saveData("Capture Data")
+
+            // Verification
+            verify {mockService.saveData("Captured Data")}
+
+            // Assertions
+            assert(slot.captured == "Captured Data")
+          }
+        }
+
+  #### Mocking Coroutines
+
+      class CoroutineService{
+        suspend fun fetchData(): String
+        {
+          return "Real Data"
+        }
+      }
+      class CoroutineTest{
+        @Test
+        fun testMockCoroutine() = runBlocking{
+              //Creating a mock object
+            val mockService = mockk<CoroutineService>()
+
+            // Stubbing the method
+             coEvery {mockService.fetchData()} returns "Mocked Data"
+
+            // Calling the method
+            val result = mockService.fetchData()
+
+            // Verification 
+            coVerify {mockService.fetchData()}
+
+            // Assertions
+            assert(result == "Mocked Data")
+        }
+      }
