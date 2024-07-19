@@ -178,7 +178,7 @@
    - **Interoperability:** You can easily convert `Flow` objects to `LiveData` objects and vice versa using extension functions provided in the Kotlin coroutines library, allowing for interoperability between the two.
 
 
-### Which One to Choose?
+#### Which One to Choose?
 
 
 - **Use LiveData When:**
@@ -195,3 +195,13 @@
 
 --> In summary, if you are primarily working within the Android ecosystem and need simple, lifecycle-aware data observability, LiveData might be a better choice. However, if you are working with Kotlin coroutines, need advanced features like back-pressure handling, or want more control over your asynchronous data streams, Flow would be the preferred option. Additionally, for applications that require both, you can easily convert between LiveData and Flow to leverage the benefits of both constructs.
 
+
+### Difference between Sealed class and Final Class:
+
+  **Sealed Class**: Used to represent a restricted class hierarchy with a known set of subclasses. Useful for modeling finite state machines and ensuring exhaustive handling in when expressions. Subclassing is restricted to the same file.
+
+  - 1. Restricts Subclassing: Only subclasses defined within the same file can inherit from a sealed class.
+  - 2. Exhaustive when Expressions: When using a sealed class in a when expression, the compiler can ensure all the possible cases are handled without needing an else clause.
+  - 3. Ideal for Representing State: Commonly used to represent different states or types of a value, such as a result of an operation(success, error, loading)
+
+    **Final Class**: In kotlin all classes are final by default meaning they cannot be subclassed unless explicitly marked as open or abstract. A final class is simply a class that cannot be inherited from.         
