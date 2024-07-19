@@ -1,6 +1,8 @@
 ## Higher-Order Function
 
---> A function which can accept a function as a parameter or can return a function is called Higher-Order function.
+--> A function which can accept a function as a parameter or can return a function is called Higher-Order function. 
+
+--> They enable more abstract and reusable code by allowing you to pass behaviors or actions as arguments, leading to more flexible and concise programming patterns.
 
 #### Passing lambda expression as a parameter to higher-order function
 
