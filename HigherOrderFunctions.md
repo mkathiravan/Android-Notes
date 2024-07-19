@@ -4,6 +4,12 @@
 
 --> They enable more abstract and reusable code by allowing you to pass behaviors or actions as arguments, leading to more flexible and concise programming patterns.
 
+**Benefits**
+
+- Conciseness: Reduces boilerplate code
+- Reusability: Functions can be reused with different operations
+- Abstraction: Allows you to abstract common patterns in code
+
 #### Passing lambda expression as a parameter to higher-order function
 
 --> We can pass a lambda expression as a parameter to Higher-order function. There are 2 types
