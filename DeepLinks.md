@@ -1,3 +1,40 @@
+## Difference between app links and deep links in android
+
+  ### App Links:
+
+  **Definition**: App links are a type of deep link that are specifically designed to open an app when a URL is clicked, rather than opening the URL in a web browser.
+
+  **Verification**: App links are verified by the system using Digital Asset Links ensuring that only the intended app can open the link. This requires hosting a file on the web server and including an intent filter in the app.
+
+   **Usage**: Commonly used for scenarios where you want to seamless transition from a web link to the app, such as a link in an email or on a website.
+
+### Deep Links:
+
+   **Definition**: Deep links are URLs that link directly to specific content or activities within an app.
+
+   **Types**:
+
+   **Traditional Deep Links**: These require the app to be installed and rely on a specific URL scheme to navigate to the desire content.
+
+   **Deferred Deep Links**: These are used when the app is not installed. They store the deep link and trigger the appropriate content after the app is installed.
+
+   **Usage**: Often used to navigate users directly to content within the app from notifications, web pages or other apps.
+
+### Key Differences:
+
+ **Verificaton**: App links require verification through Digital Asset Links, whereas traditional deep links do not.
+
+ **User Experience**: App links provide a more secure and seamless user experience, as they ensure the link opens in the correct app.
+
+**Installation**: App links can only work if the app is installed and verified, while traditional deep links can be handled by any app that declares support for the URL scheme.
+
+**Example**:
+
+ **App Link**: A link to https://www.example.com/somecontent that opens directly in the example app if installed and verified.
+
+ **Deep Link**: A custom URL scheme like example://somecontent that opens the Example app to the specified content if the app is installed.
+      
+
 ## How deep links verify against the host name in android
 
 ---> Deep links in Android are verified against the host name using a process called "App Links" or "Digital Asset Links"(DAL). This process ensures that a specific URL should be opened by a particular app instead of a web browser or other apps. 
