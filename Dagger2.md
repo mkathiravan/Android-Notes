@@ -138,3 +138,158 @@
                 activityDependency.doSomething()
               }
             }
+
+#### 8. Assisted Injection
+
+--> For runtime values, use **AssistedInject**.
+
+1. Define ViewModel with AssistedInject
+
+        class MyViewModel @AssistedInject constructor(@Assisted private val runtimeValue: String)
+         {
+            fun getRuntimeValue(): String{
+                return runtimeValue
+               }
+            
+            @AssistedFactory
+            interface Factory{
+               fun create(runtimeValue: String): MyViewModel
+           }       
+         }
+
+ 2. Add Factory to the Component
+
+        @Singleton
+        @Component(modules = [AppModule::class])
+        interface AppComponent
+        {
+            fun inject(activity: MyActivity)
+            fun myViewModelFactory(): MyViewModel.Factory
+        }  
+
+3. Inject Factory in the Activity
+
+       class MyActivity: AppCompatActivity()
+       {
+            @Inject lateinit var myViewModelFactory: MyViewModel.Factory
+
+            override fun onCreate(savedInstanceState: Bundle?)
+               {
+                   super.onCreate(savedInstanceState)
+                   setContentView(R.layout.activity_main)
+
+                   (application as MyApplication).appComponent.inject(this)
+
+                   val runtimeValue = "Some runtime value"
+                   val myViewModel = myViewModelFactory.create(runtimeValue)
+
+                   // Now myViewModel is available to use
+                   Log.d(TAG,myViewModel.getRuntimeValue())
+               }
+       }
+
+
+### Putting it all Together
+
+**AppModule.kt**
+
+        @Module
+        class AppModule{
+            @Provides
+            @Singleton
+            fun provideSomeDependency(): SomeDependency()
+            {
+                return SomeDependency()
+            }
+        }
+
+**AppComponent.kt**
+
+    @Singleton
+    @Component(modules = [AppModule::class]
+    interface AppComponent{
+        fun inject(activity: MyActivity)
+        fun myviewModelFactory(): MyViewModel.Factory
+        fun activitySubcomponent(activityModule: ActivityModule): ActivitySubcomponent
+    }
+
+**RuntimeValueModule.kt**
+
+     @Module
+     class RuntimeValueModule(private val runtimeValue: String)
+     {
+         @Provides
+         @RuntimeValue
+         fun provideRuntimeValue(): String
+         {
+             return runtimeValue
+         }
+     }
+
+**MyViewModel.kt**
+
+    class MyViewModel @AssistedInject constructor(@Assisted private val runtimeValue: String)
+    {
+        fun getRuntimeValue(): String
+        {
+            return runtimeValue
+        }
+
+        @AssistedFactory
+        interface Factory{
+            fun create(runtimeValue: String): MyViewModel
+        }
+    }
+
+**MyApplication.kt**
+
+        class MyApplication : Application()
+        {
+            lateinit var appComponent: AppComponent
+
+            override fun onCreate()
+            {
+                super.onCreate()
+                appComponent = DaggerAppComponent.builder().appModule(AppModule()).build()
+            }
+        }
+
+**MyActivity.kt**
+
+      class MyActivity : AppCompatActivity()
+      {
+          @Inject
+          @RuntimeValue
+          lateinit var runtimeValue: String
+          
+          @Inject
+          lateinit var myViewModelFactory: MyViewModel.Factory
+
+          @Inject
+          lateinit var activityDependency: ActivityDependency
+
+          override fun onCreate(savedInstanceState: Bundle?)
+          {
+              super.onCreate(savedInstanceState)
+              setContentView(R.layout.activity_main)
+
+              val value = "Some runtime value"
+
+              val module = RuntimeValueModule(value)
+
+              val appComponent = DaggerAppComponent.builder().runtimeValueModule(module).build()
+
+              appComponent.inject(this)
+
+              val activitySubcomponent = appComponent.activitySubcomponent(ActivityModule())
+
+              activitySubcomponent.inject(this)
+
+              val myViewModel = myViewModelFactory.create(value)
+
+              //Now runtimeValue and myViewModel are available to use
+
+              Log.d(TAG, runtimeValue)
+              Log.d(TAG, myViewModel.getRuntimeValue())
+          }
+      }
