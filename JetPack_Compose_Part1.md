@@ -156,3 +156,14 @@ Good Example:
            val textState = remember {mutableStateOf("Initial")}
            TextField(value = textState.value, onValueChange = {textState.value =  it}
         }
+
+
+#### Unoptimized Layouts:
+
+- **Deep Nesting**: Avoid excessively nested composables, as each layer contributes to the overall recomposition cost. Break down complex layouts into smaller, more manageable composable.
+
+- **Unncessary Modifiers**: Overuse of modifiers can impact performance. Consider combining modifiers using then or compose to reduce the number of recomposition.
+
+#### Excessive Side Effects:
+
+- **Unncessary UI Updates**: Limit unncessary UI updates within composables. Use techniques like derivedStateOf or State objects to manage state change efficiently.
