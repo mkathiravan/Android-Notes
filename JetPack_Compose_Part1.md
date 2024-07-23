@@ -124,3 +124,35 @@ Good Example:
           delay(2000)
           return "Data loaded"       
         }
+
+#### Unnecessary State Hoisting:
+
+ - Hoisting state unnecessarily can lead to complex and hard-to-manage state.
+
+Bad Example:
+
+        @Composable
+        fun ParentComposable()
+        {
+          val textState = remember {mutableStateOf("Initial")}
+          ChildComposable(textState)
+        }
+
+        @Composable
+        fun ChildComposable(textState: MutableState<String>){
+           TextField(value = textState.value, onValueChange = {textState.value = it})
+        }
+
+Good Example:
+
+        @Composable()
+        {
+          ChildComposable()
+        }
+
+        @Composable
+        fun ChildComposable()
+        {
+           val textState = remember {mutableStateOf("Initial")}
+           TextField(value = textState.value, onValueChange = {textState.value =  it}
+        }
