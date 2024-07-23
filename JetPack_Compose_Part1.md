@@ -88,3 +88,39 @@ Good Example
            fun HeavyComposable(){
             // Some heavy composable that does not need to recompose frequently 
            }
+
+
+#### Heavy Operations on the Main Thread:
+
+- Performing resource-intensive tasks on the main thread can cause UI jank.
+
+Bad Example:
+
+        @Composable
+        fun LoadDataScreen()
+        {
+           val data = loadData()
+           Text(data)
+        }
+
+        fun loadData(): String()
+        {
+          return "Data loaded"
+        }
+
+Good Example:
+
+        @Composable
+        fun LoadDataScreen()
+        {
+           val data by produceState<String>(initialValue = null){
+               value = loadData()
+           } 
+           Text(data ?: "Loading...")         
+        }
+
+        suspend fun loadData(): String
+        {
+          delay(2000)
+          return "Data loaded"       
+        }
