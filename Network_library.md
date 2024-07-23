@@ -12,6 +12,9 @@ Kotlin developers, are you wondering which networking library to choose for your
 
 🔹 HTTP/2 Support: Built-in support for HTTP/2, ensuring efficient network communication.
 
+![image](https://github.com/user-attachments/assets/524bf19b-357c-47a7-961e-97bf8f34079b)
+
+
 **Ktor**: 
 
 🔹 Kotlin-First: Designed from the ground up for Kotlin, offering a more idiomatic experience. 
@@ -21,6 +24,9 @@ Kotlin developers, are you wondering which networking library to choose for your
 🔹 Flexible and Modular: Highly configurable with a modular structure, allowing you to include only what you need. 
 
 🔹 Server and Client: A full-stack framework for both client-side and server-side development.
+
+![image](https://github.com/user-attachments/assets/8c5ef84e-79ec-4428-a949-d8c67c0ef1c5)
+
 
 
 **Key Takeaways**
