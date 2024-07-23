@@ -37,3 +37,54 @@ Bad Example:
        val formattedText = remember(text) {text.toUpperCase()}
        Text(formattedText)
      }
+
+
+#### Excessive Recomposition:
+
+- Unnecessary recompositions can degrade performance.
+
+Bad Example
+
+       @Composbale
+       fun MyScreen()
+       {
+          val count = remember {mutableStateOf(0)} 
+          Column{
+             Button(onClick = {count.value++}{
+               Text("Increment")      
+             } 
+             Text("Count: ${count.value}")
+            // This entire column will recompose every time count changes
+            HeavyComposbale()
+          }
+       }
+
+       @Composbale
+       fun HeavyComposbale(){
+          // Some heavy composable that does not need to recompose frequently     
+       }
+
+Good Example
+
+              @Composable
+              fun MyScreen()
+              {
+                val count = remember {mutableStateOf(0)}
+                Column{
+                    Button(onClick = {count.value++}{
+                        Text("Increment")
+                    }
+                TextCounter(count.value)
+                HeavyComposable()
+                }
+              }
+
+            @Composable
+            fun TextCounter(count: Int){
+              Text("Count": $count")      
+            }
+
+           @Composable
+           fun HeavyComposable(){
+            // Some heavy composable that does not need to recompose frequently 
+           }
