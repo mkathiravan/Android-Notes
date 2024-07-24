@@ -204,4 +204,41 @@
   - 2. Exhaustive when Expressions: When using a sealed class in a when expression, the compiler can ensure all the possible cases are handled without needing an else clause.
   - 3. Ideal for Representing State: Commonly used to represent different states or types of a value, such as a result of an operation(success, error, loading)
 
-    **Final Class**: In kotlin all classes are final by default meaning they cannot be subclassed unless explicitly marked as open or abstract. A final class is simply a class that cannot be inherited from.         
+    **Final Class**: In kotlin all classes are final by default meaning they cannot be subclassed unless explicitly marked as open or abstract. A final class is simply a class that cannot be inherited from.  
+
+
+#### Activity based questions:
+
+Activity A, B & C
+
+1. Activity A
+2. Activity B — order of override call methods
+3. Activity C
+4. Activty Back
+
+
+
+Activity A:
+
+  onCreate(), onStart(), onResume()
+
+Call Activity B from Activity A
+
+Activity A -> OnPause()
+Activity B —> OnCreate(), onStart(), onResume()
+Activity A -> onStop()
+
+Call Activity C from Activity B
+
+Activity B -> OnPause()
+Activity C —> OnCreate(), onStart(), onResume()
+Activity B -> onStop()
+
+
+If you press back button form Activity C
+
+Activity C -> OnPause()
+
+Activity B -> onStart(), OnResume()
+
+Activity C -> onStop(), onDestory()       
