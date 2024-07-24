@@ -234,11 +234,64 @@ Activity B -> OnPause()
 Activity C —> OnCreate(), onStart(), onResume()
 Activity B -> onStop()
 
-
 If you press back button form Activity C
 
 Activity C -> OnPause()
 
 Activity B -> onStart(), OnResume()
 
-Activity C -> onStop(), onDestory()       
+Activity C -> onStop(), onDestory() 
+
+
+
+### Example 1:
+
+        flowOf(2,4,6,8).onEach{
+           delay(1000)
+        }.flowOn(Dispatchers.Default)
+
+### Example 2: 
+
+        (1…5).asFlow().onEach{
+           delay(1000)
+        }.flowOn(Dispatchers.Default)
+
+### Example 3: Safe Cast(as?)      
+
+
+        val obj: Any = “Hello”
+        val str: String? = obj as? String
+
+### Example 4: Smart Cast(is)
+
+        val obj: Any = “Hello”
+        if(obj is String)
+        {
+          println(obj.length)
+        }
+
+### Example : Sealed Class
+
+        sealed class Result
+        {
+         data class Success(val data: String): Result()
+        
+         data class Error(val message: String): Result()
+        
+          object Loading: Result()
+        }
+        
+        fun processResult(result: Result)
+        {
+          when(result)
+           {
+            is Result.Success -> {print(“Success”)}
+            is Result.Error -> {print(“Error”)}
+        }
+        }
+
+### Example:
+
+        WorkManager.getInstance(context).beginWith(requestWO1).then(requestWO2).enqueue()
+
+ ---> The above code snippet is used to schedule a chain of background work requests in an Android application using WorkManager.
