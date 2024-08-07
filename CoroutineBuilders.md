@@ -181,3 +181,20 @@ If you run the above program the output would be like as
          Child1 completed
          Child2 completed
          Child2 caught an exception: Child2 failed
+
+
+## launch: -
+
+         It is ideal for fire-and-forgot scenarios when you need to execute a coroutine without waiting for it's result, it's leightweight and returns a job.
+
+## async: -
+
+         Starts a new Coroutine and returns a deferred for a result, it represents a promise to deliver a result in the feature.
+
+## runBlocking: -
+
+         Blocks the current thread until the coroutines completes, it is primary used in test code.
+
+## withContext: -
+
+         Switches the content of a coroutine without starting a new coroutine.
