@@ -540,3 +540,24 @@ C) **State Hoisting**: Passing state and state-modifying callbacks from parent c
                 
                     }
                 }
+
+
+## 𝗘𝘅𝗽𝗹𝗼𝗿𝗶𝗻𝗴 𝗦𝘁𝗮𝘁𝗲 𝗛𝗼𝗶𝘀𝘁𝗶𝗻𝗴 𝗶𝗻 𝗝𝗲𝘁𝗽𝗮𝗰𝗸 𝗖𝗼𝗺𝗽𝗼𝘀𝗲
+As we dive deeper into Jetpack Compose, one of the core concepts that stands out is State Hoisting. It's a simple yet powerful pattern that allows us to write more reusable and testable composables.
+
+## 𝗪𝗵𝗮𝘁 𝗶𝘀 𝗦𝘁𝗮𝘁𝗲 𝗛𝗼𝗶𝘀𝘁𝗶𝗻𝗴? 
+In Jetpack Compose, state hoisting refers to moving the state from a composable to a higher level in the component hierarchy. This means instead of keeping state within a specific composable, we lift it up and pass it down as parameters. This approach allows different components to share and manage the same state, promoting better separation of concerns.
+
+## 𝗪𝗵𝘆 𝘂𝘀𝗲 𝗦𝘁𝗮𝘁𝗲 𝗛𝗼𝗶𝘀𝘁𝗶𝗻𝗴? 📈
+
+𝗥𝗲𝘂𝘀𝗮𝗯𝗶𝗹𝗶𝘁𝘆: By hoisting state our composables become stateless, making them easier to reuse across different parts of the app.
+
+𝗧𝗲𝘀𝘁𝗮𝗯𝗶𝗹𝗶𝘁𝘆: Stateless composables are more predictable making them easier to test in isolation.
+
+𝗦𝗶𝗻𝗴𝗹𝗲 𝗦𝗼𝘂𝗿𝗰𝗲 𝗼𝗳 𝗧𝗿𝘂𝘁𝗵: Keeping state in a single place helps prevent bugs and inconsistencies, ensuring that different UI elements are always in sync.
+
+𝗘𝘅𝗮𝗺𝗽𝗹𝗲:
+
+Imagine a counter button that displays and increments a count. Instead of keeping the count state inside the button composable, we hoist it up to the parent, allowing other components to access and modify the count. With this approach, we maintain a clear flow of data and logic, making our app more maintainable in the long run.
+
+![State_hositing](https://github.com/user-attachments/assets/0eb48dfb-aafb-42ab-88aa-f67bee63c544)
