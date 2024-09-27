@@ -295,3 +295,70 @@ Activity C -> onStop(), onDestory()
         WorkManager.getInstance(context).beginWith(requestWO1).then(requestWO2).enqueue()
 
  ---> The above code snippet is used to schedule a chain of background work requests in an Android application using WorkManager.
+
+### 3 ways to Load Initial Data in Android
+
+**1.Launched Effect:**
+
+   Disadvantage: Every time a configuration change occurs (such as screen rotation), recomposition happens, causing LaunchedEffect to restart. This leads to 
+   LoadInitialData being called multiple time unncessarily.
+
+                
+        class MyViewModelL : ViewModel()
+        {
+          private val _state = MutableStateFlow("")
+          val state = _state.asStateFlow()
+
+          fun loadInitialData()
+          {
+             viewModelScope.launch{
+                delay(1000)
+                _state.update {"Initial data"}
+             }     
+          }
+        }
+
+        @Composable
+        fun MyScreen()
+        {
+           val viewModel = ViewModel<MyViewModel>()
+           val state by viewModel.state.collectAsStateWithLifecycle()
+
+           LaunchedEffect(Unit)
+           {
+              viewModel.loadInitialData()
+           }
+          Text(text = state)
+        }
+
+ **2.ViewModel Init Block:**
+
+        Disadvantage: Testing is problematic because we lack control over the LoadInitialData function being called during initilization. This makes it difficult to write reliable tests or trigger the function at the right moment.
+
+         class MyViewModel : ViewModel()
+         {
+             private val _state = MutableStateFlow("")
+             val state = _state.asStateFlow()
+
+             init
+             {
+                loadInitialData()
+             }
+
+         private fun loadInitialData()
+          {
+             viewModelScope.launch{
+                delay(1000)
+                _state.update {"Initial data"}
+             }     
+          }
+             
+         }
+
+       @Composable
+        fun MyScreen()
+        {
+           val viewModel = ViewModel<MyViewModel>()
+           val state by viewModel.state.collectAsStateWithLifecycle()
+           Text(text = state)
+        }
