@@ -333,7 +333,7 @@ Activity C -> onStop(), onDestory()
 
  **2.ViewModel Init Block:**
 
-        Disadvantage: Testing is problematic because we lack control over the LoadInitialData function being called during initilization. This makes it difficult to write reliable tests or trigger the function at the right moment.
+Disadvantage: Testing is problematic because we lack control over the LoadInitialData function being called during initilization. This makes it difficult to write reliable tests or trigger the function at the right moment.
 
          class MyViewModel : ViewModel()
          {
@@ -356,6 +356,38 @@ Activity C -> onStop(), onDestory()
          }
 
        @Composable
+        fun MyScreen()
+        {
+           val viewModel = ViewModel<MyViewModel>()
+           val state by viewModel.state.collectAsStateWithLifecycle()
+           Text(text = state)
+        }
+
+**3.Flow onStart Extension Function**
+
+Best way: It allows you to fully control the execution during App run and also writing tests.
+
+        class ViewModel : ViewModel()
+        {
+                private val _state = MutableStateFlow("")
+                val state = _state
+                        .onStart { loadInitialData() }
+                        .stateIn(
+                           scope = viewModelScope,
+                           started = SharingStarted.WhileSubscribed(5000L),
+                           initialValue = ""
+                        )
+
+          private fun loadInitialData()
+          {
+             viewModelScope.launch{
+                delay(1000)
+                _state.update {"Initial data"}
+             }     
+          }
+        }
+
+        @Composable
         fun MyScreen()
         {
            val viewModel = ViewModel<MyViewModel>()
