@@ -394,3 +394,8 @@ Best way: It allows you to fully control the execution during App run and also w
            val state by viewModel.state.collectAsStateWithLifecycle()
            Text(text = state)
         }
+
+
+### Mapping functions
+
+![image](https://github.com/user-attachments/assets/1c0ccaa3-f9cf-4d2c-96a1-f73261754c9f)
