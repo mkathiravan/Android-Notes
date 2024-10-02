@@ -41,6 +41,46 @@
 --> The @Inject annotation tells Dagger how to provide instances of a class. In constructors, it signals Dagger to use that constructor for dependency creation. In fields, Dagger will inject the necessary dependency automatically, and in methods, it's used to inject dependencies after an object has been created.
 
 
+**What is the purpose of a @Binds in Dagger, and when you would use it?**
+
+--> @Binds is used to bind an implementation of an interface to its interface type. It's preferred over @Provides when there's only one create implementation of an interface because it is more efficient as it avoids creating an extra method at runtime.
+
+
+**Explain how Hilt handles dependency injection in Android's ViewModel?**
+
+--> Hilt simplifies injecting dependencies into ViewModel by using the @HiltViewModel annotation. This allows Hilt to automatically inject the necessary dependencies into ViewModel. Additionally, you can use the SavedStateHandle in combination with Hilt to retain state during process death.
+
+
+**What is a Subcomponent in Dagger, and how does it differ from a Component?**
+
+--> A Subcomponent is a type of Dagger Component that is dependent on another parent Component. It can inherit dependencies from its parent and also provide its own scoped dependencies. Subcomponent is often used when you want to create different DI graphs for different parts of your application, such as a specific feature module.
+
+
+**Can you explain how Dagger manages dependencies lifecycles using custom scopes?**
+
+--> Dagger allows you to define custom scopes, which ensure that dependencies live as long as the scope they are tied to. For example, using an @ActivityScope, Dagger will ensure the same instance of the dependency is provided throughout the activity's lifecycle. If you use a different scope like @FragmentScope, dependencies tied to this scope will live as long as the fragment does.
+
+
+**What is the purpose of @EntryPoint in Hilt, and when is it used?**
+
+--> @EntryPoint is used to access Hilt dependencies in classes that Hilt cannot inject into directly, such as ContentProvider, BroadcastReceiver, and WorkManager. It allows Hilt to inject dependencies where regular injection is not possible
+
+
+**How does Dagger/Hilt handle multibinding and how is it usefult?**
+
+--> Dagger and Hilt support multibinding, which allows injecting collections of objects (e.g, Set, Map) into a class. It is useful when multiple implementations or instances of a dependency need to be injected and managed together.
+
+
+**How does Hilt work with WorkManager and other Android components not directly supported by Hilt?**
+
+--> Hilt can inject dependencies into classes like WorkManager using @EntryPoint, and with AssistedInject for cases where only part of the dependencies are provided by Hilt and the rest come from Android(like in Worker).
+
+
+**How do @Inject constructors simplify dependency provision in Hilt compared to manually providing dependencies with @Provides?**
+
+--> Hilt can automatically inject dependencies if a class has an @Inject constructor, which reduces the need to write explicit @Provides methods. This makes DI easier and eliminates much of the boilerplate code.
+
+
 --> To understand it better in a basic way, think module as a provider of dependency and consider an activity or any other class as a consumer. Now to provide dependency from provider to consumer we have a bridge between them, in Dagger, Component work as that specific bridge.
 
 ---> Now, a module is a class and we annotate it with @Module for Dagger to understand it as Module.
