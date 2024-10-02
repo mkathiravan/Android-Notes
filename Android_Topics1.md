@@ -399,3 +399,37 @@ Best way: It allows you to fully control the execution during App run and also w
 ### Mapping functions
 
 ![image](https://github.com/user-attachments/assets/1c0ccaa3-f9cf-4d2c-96a1-f73261754c9f)
+
+
+**LifeCycleOwner Vs ViewLifeCycleOwner**
+
+i) Fragment Lifecycle: 
+
+   --> The Fragment lifecycle includes states like onCreate, onStart and onDestroy.
+
+   --> The Fragment can remain in memory, even when its view is not visible
+
+ii) Fragment View Lifecycle
+
+   --> The view lifecycle consists of onCreateView, onViewCreated, and onDestroyView.
+
+   --> This lifecycle specifically manages the Fragment's UI, getting destroyed when navigating away.
+
+
+   Key Difference:
+
+    --> Fragment Lifecycle: Connected to the Fragment itself; it stays in memory even when the view is not visible.
+
+    --> View Lifecycle: Connected to the Fragments UI; it gets destroyed whenyou navigate away, so onViewCreated runs again when you come back.
+
+    Problem with LifecycleOwner:
+
+    --> When you use LifecycleOwner, observers are tied to the Fragment lifecycle. This means they stay active even after the view is destroyed.
+
+    --> This can lead to memory leaks, as the old view and its data can remain in memory. Additionally, it can cause unintended updates to the UI, since the observers might still trigger changes even when the view isn't visible.
+
+    Solution: ViewLifecycleOwner
+
+    ViewLifecycleOwner links LiveData observers to the Fragment's view lifecycle.
+
+    Observers are active only when the view is visible, preventing memory leaks and ensuring updates happen only when the view is ready.
