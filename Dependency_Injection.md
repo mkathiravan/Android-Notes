@@ -23,7 +23,23 @@
 
  ---> Hilt is a DI library built on top of Dagger to make it easier to implement DI in Android apps. It provides default bindings for common Android components like Activity, Fragment, ViewModel and Application, which reduces boilerplate code and simplifies the setup process compared to Dagger.
 
- 
+
+**What is a Componenet in Dagger, and What is its role in Dependency Injection?**
+
+--> In Dagger, a Component is an interface that acts as a bridge between the @Module that provides dependencies and the classes where the dependencies are injected. It tells Dagger where to get the dependencies and where to inject them.
+
+
+**What is the difference between @Singleton and @Scope annotations in Dagger/Hilt?**
+
+--> @Singleton is a specific scope that ensures a single instance of a dependency is created and shared across the application. 
+
+--> @Scope is a general term for custom scopes in DI which allows us to define different lifecycles for different components(e.g, @ActivityScope, @FragmentScope), controlling how long dependencies are retained.
+
+
+**How does the @Inject annotation work in constructors, fields, and methods in Dagger?**
+
+--> The @Inject annotation tells Dagger how to provide instances of a class. In constructors, it signals Dagger to use that constructor for dependency creation. In fields, Dagger will inject the necessary dependency automatically, and in methods, it's used to inject dependencies after an object has been created.
+
 
 --> To understand it better in a basic way, think module as a provider of dependency and consider an activity or any other class as a consumer. Now to provide dependency from provider to consumer we have a bridge between them, in Dagger, Component work as that specific bridge.
 
