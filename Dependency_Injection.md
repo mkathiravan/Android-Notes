@@ -7,6 +7,24 @@
     Provides
     Inject
 
+**What is Dependency Injection, and why is it important in Android Development?**
+
+--> Dependency Injection is a design pattern where objects receive their dependencies from an external source rather than creating them within the class. It improves code modularity, testability, and scalability by allowing dependencies to be swapped easily(for example, during testing).
+
+
+**What is Dagger, and how does it implement Dependency Injection in Android?**
+
+--> Dagger is a popular DI framework for Android, which generates code at compile-time to resolve dependencies. It provides dependency graphs and injects dependencies into Android components like Activities, Fragments, Services, etc.
+
+  It uses annotations like @Inject, @Module, @Component, etc., to wire dependencies.
+
+
+ **How does Hilt simplify Dependency Injection compared to Dagger?**
+
+ ---> Hilt is a DI library built on top of Dagger to make it easier to implement DI in Android apps. It provides default bindings for common Android components like Activity, Fragment, ViewModel and Application, which reduces boilerplate code and simplifies the setup process compared to Dagger.
+
+ 
+
 --> To understand it better in a basic way, think module as a provider of dependency and consider an activity or any other class as a consumer. Now to provide dependency from provider to consumer we have a bridge between them, in Dagger, Component work as that specific bridge.
 
 ---> Now, a module is a class and we annotate it with @Module for Dagger to understand it as Module.
