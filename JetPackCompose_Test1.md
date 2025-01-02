@@ -44,3 +44,40 @@ Use the Compose testing APIs to interact with and verify the state of your compo
                composeTestRule.onNodeWithText("Hello, World!").assertIsDisplayed()
            }
           }
+
+ 2. Test Button Click
+
+--> Verify that a button click updates the UI as expected.
+     
+     class MyComposeUITest{
+          @get:Rule
+          val composeTestRule = createComposeRule()
+     
+         @Test
+         fun testButtonClick(){
+           composeTestRule.setContent{
+              CounterScreen()
+           }
+           composeTestRule.onNodeWithText("Increment").performClick()
+           composeTestRule.onNodeWithText("Count:1").assertExists()
+         }
+       }
+
+ 3. Interacting with Inputs
+
+  --> Verify that text inputs fields work correctly.
+
+class MyComposeUITest{
+   @get:Rule
+   val composeTestRule = createComposeRule()
+
+   @Test
+   fun testTextInput(){
+     composeTestRule.setContent{
+        MyTextInput()
+     }
+     composeTestRule.onNodeWithTag("inputField").performTextInput("Compose Testing")
+     composeTestRule.onNodeWithTag("inputField").assertTextEquals("Compose Testing")
+   }
+}
+  
